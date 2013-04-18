@@ -9,7 +9,7 @@ class PersonalInfo(models.Model):
 	#FacebookData needs to be implimented
 	#
 	userAccount = models.OneToOneField(UserAccount)
-	fistName = models.CharField(max_length=200)
+	firstName = models.CharField(max_length=200)
 	lastName = models.CharField(max_length=200)
 	username = models.CharField(max_length=200)
 	school = models.CharField(max_length=200)
@@ -54,3 +54,6 @@ class Course(models.Model): #static course, you have to take this
 	number = models.IntegerField(default=0) #specify length or max
 	hours = models.IntegerField(default=0) #specify length or max
 	name = models.CharField(max_length=200)
+
+	def __unicode__(self):
+		return self.department + " " + str(self.number) + " (" + str(self.hours) + ")" 
