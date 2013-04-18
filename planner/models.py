@@ -42,6 +42,9 @@ class Semester(models.Model):
 	year = models.IntegerField(default=2000)
 	#Many Courses implicit
 
+	def __unicode__(self):
+		return self.term + " " + str(self.year)
+
 class Course(models.Model): #static course, you have to take this
 	courseChoices = models.ManyToManyField(CourseChoice, related_name='courses')
 	semesters = models.ManyToManyField(Semester, related_name='courses')
