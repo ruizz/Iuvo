@@ -14,6 +14,9 @@ class PersonalInfo(models.Model):
 	username = models.CharField(max_length=200)
 	school = models.CharField(max_length=200)
 
+	def __unicode__(self):
+		return self.lastName 
+
 class DegreePlan(models.Model):
 	#Many courseGroups implicit
 	userAccount = models.OneToOneField(UserAccount)
@@ -44,16 +47,15 @@ class Semester(models.Model):
 
 	def __unicode__(self):
 		return self.term + " " + str(self.year)
-
 class Course(models.Model): #static course, you have to take this
-	courseChoices = models.ManyToManyField(CourseChoice, related_name='courses')
-	semesters = models.ManyToManyField(Semester, related_name='courses')
+	courseChoices = models.ManyToManyField(CourseChoice, related_name='courses', blank=True)
+	semesters = models.ManyToManyField(Semester, related_name='courses', blank=True)
 	#hardcoded for TAMU department names and course numbers
 	#below are basically static fields
 	department = models.CharField(max_length=4)
 	number = models.IntegerField(default=0) #specify length or max
 	hours = models.IntegerField(default=0) #specify length or max
-	name = models.CharField(max_length=200)
+	name = models.CharField(max_length=200, blank=True)
 
 	def __unicode__(self):
 		return self.department + " " + str(self.number) + " (" + str(self.hours) + ")" 
