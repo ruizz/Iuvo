@@ -4,12 +4,12 @@ from django.db import models
 class UserAccount(models.Model):
 	#One Personal Info, Degree plan, and degree schedule implicit
 	def __unicode__(self):
-		return self.personlInfo.lastName + ", " + self.personlInfo.firstName
+		return self.personalInfo.lastName + ", " + self.personalInfo.firstName
 
 class PersonalInfo(models.Model):
 	#FacebookData needs to be implimented
 	#
-	userAccount = models.OneToOneField(UserAccount, related_name='personlInfo')
+	userAccount = models.OneToOneField(UserAccount, related_name='personalInfo')
 	firstName = models.CharField(max_length=200)
 	lastName = models.CharField(max_length=200)
 	username = models.CharField(max_length=200)
@@ -54,7 +54,8 @@ class DegreeSchedule(models.Model):
 	userAccount = models.OneToOneField(UserAccount, related_name='degreeSchedule')
 
 	def __unicode__(self):
-		return userAccount.personlInfo.lastName
+		info = self.userAccount.personalInfo
+		return info.firstName + " " + info.lastName + "'s Schedule"
 
 class Semester(models.Model): 
 	degreeSched = models.ForeignKey(DegreeSchedule, related_name='semesters')
@@ -68,6 +69,7 @@ class Semester(models.Model):
 class Course(models.Model): #static course, you have to take this
 	courseChoices = models.ManyToManyField(CourseChoice, related_name='courses', blank=True)
 	semesters = models.ManyToManyField(Semester, related_name='courses', blank=True)
+	courseGroups = models.ManyToManyField(CourseGroup, related_name='courses', blank=True)
 	#hardcoded for TAMU department names and course numbers
 	#below are basically static fields
 	department = models.CharField(max_length=4)
