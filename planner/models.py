@@ -3,13 +3,7 @@ from django.db import models
 	
 class UserAccount(models.Model):
 	#One Personal Info, Degree plan, and degree schedule implicit
-	def __unicode__(self):
-		return self.personalInfo.lastName + ", " + self.personalInfo.firstName
 
-class PersonalInfo(models.Model):
-	#FacebookData needs to be implimented
-	#
-	userAccount = models.OneToOneField(UserAccount, related_name='personalInfo')
 	firstName = models.CharField(max_length=200)
 	lastName = models.CharField(max_length=200)
 	username = models.CharField(max_length=200)
@@ -17,6 +11,19 @@ class PersonalInfo(models.Model):
 
 	def __unicode__(self):
 		return self.lastName + ", " + self.firstName
+
+# # relocated to UserAccount Class
+# class PersonalInfo(models.Model):
+# 	#FacebookData needs to be implimented
+# 	#
+# 	userAccount = models.OneToOneField(UserAccount, related_name='personalInfo')
+# 	firstName = models.CharField(max_length=200)
+# 	lastName = models.CharField(max_length=200)
+# 	username = models.CharField(max_length=200)
+# 	school = models.CharField(max_length=200)
+
+# 	def __unicode__(self):
+# 		return self.lastName + ", " + self.firstName
 
 class DegreePlan(models.Model):
 	#Many courseGroups implicit
