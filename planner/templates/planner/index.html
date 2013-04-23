@@ -1,0 +1,10 @@
+<h1>You are at the planner index!!!</h1>
+<p>Here are the current users. This may or may not be a privacy issue...</p>
+<p>{{ userAccounts.count }} user accounts total</p>
+<ul>
+	{% for account in userAccounts %}
+		<li><a href="{% url 'userAccount' username=account.username %}">
+			{{ account.firstName }} {{ account.lastName }}
+		</a></li>
+	{% endfor %}
+</ul>

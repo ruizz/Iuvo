@@ -1,5 +1,5 @@
 from django.contrib import admin
-from planner.models import UserAccount, PersonalInfo, DegreePlan, CourseGroup, CourseChoice, DegreeSchedule, Semester, Course
+from planner.models import UserAccount, DegreePlan, CourseGroup, CourseChoice, DegreeSchedule, Semester, Course
 
 
 #inlines
@@ -35,12 +35,8 @@ class SemesterAdmin(admin.ModelAdmin):
 class UserAccountAdmin(admin.ModelAdmin):
 	inlines = []
 
-class PersonalInfoAdmin(admin.ModelAdmin):
-	inlines = []
-
 
 admin.site.register(UserAccount, UserAccountAdmin)
-admin.site.register(PersonalInfo)
 admin.site.register(DegreePlan, DegreePlanAdmin)
 admin.site.register(CourseGroup, CourseGroupAdmin)
 admin.site.register(CourseChoice)

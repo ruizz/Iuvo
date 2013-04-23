@@ -1,0 +1,21 @@
+<div>
+	<div>
+		<h1>{{ degreePlan.name }}</h1>
+	</div>
+	<div>
+		<ul>
+			{% for cg in degreePlan.courseGroups.all %}
+				<li>
+					<a href="#"><h2>{{ cg.name }}</h2></a>
+					<ul>
+						{% for course in cg.courses.all %}
+							<li><a href="#">{{ course }}</a></li>
+						{% empty %}
+							<p>No Courses</p>
+						{% endfor %}
+					</ul>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
