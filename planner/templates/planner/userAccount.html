@@ -5,5 +5,12 @@
  		<li>Last Name: {{ userAccount.lastName }}</li>
  		<li>Username: {{ userAccount.username }}</li>
  		<li>School: {{ userAccount.school }}</li>
+ 		<li>Degree Plan: 
+			{% if userAccount.degreePlan%}
+ 				<a href="{% url 'degreePlan' dpID=userAccount.degreePlan.id %}">{{ userAccount.degreePlan.name }}</a></li>
+			{% else %}
+				No degree plan.
+			{% endif %}
  	</ul>
+
  </div>
