@@ -2,40 +2,28 @@ from django.db import models
 from django.db import models
 	
 class UserAccount(models.Model):
-	#One Personal Info, Degree plan, and degree schedule implicit
+	#One DegreePlan and DegreeSchedule implicit
 
 	firstName = models.CharField(max_length=200)
 	lastName = models.CharField(max_length=200)
 	username = models.CharField(max_length=200)
 	school = models.CharField(max_length=200)
+	# need dropbox and facebook account data
 
 	def __unicode__(self):
 		return self.lastName + ", " + self.firstName
-
-# # relocated to UserAccount Class
-# class PersonalInfo(models.Model):
-# 	#FacebookData needs to be implimented
-# 	#
-# 	userAccount = models.OneToOneField(UserAccount, related_name='personalInfo')
-# 	firstName = models.CharField(max_length=200)
-# 	lastName = models.CharField(max_length=200)
-# 	username = models.CharField(max_length=200)
-# 	school = models.CharField(max_length=200)
-
-# 	def __unicode__(self):
-# 		return self.lastName + ", " + self.firstName
 
 class DegreePlan(models.Model):
 	#Many courseGroups implicit
 	userAccount = models.OneToOneField(UserAccount, related_name='degreePlan')
 	name = models.CharField(max_length=200)
-	major = models.CharField(max_length=200)
+	major = models.CharField(max_length=200) # not sure what this is
 
 	def __unicode__(self):
 		return self.name
 
 class CourseGroup(models.Model):
-	#Many CourseChoice implicit
+	#Many CourseChoices implicit
 	degreePlan = models.ForeignKey(DegreePlan, related_name='courseGroups')
 	name = models.CharField(max_length=200)
 
@@ -48,6 +36,7 @@ class CourseChoice(models.Model): #dynamic course, choose these
 	courseGroup = models.ForeignKey(CourseGroup, related_name='courseChoices')
 	courseSelected = models.BooleanField(default=False)
 	selectedCourse = models.ForeignKey('Course')
+	required = models.BooleanField(default=False) 
 
 	def __unicode__(self):
 		if courseSelected:
@@ -73,15 +62,13 @@ class Semester(models.Model):
 	def __unicode__(self):
 		return self.term + " " + str(self.year)
 
-class Course(models.Model): #static course, you have to take this
+class Course(models.Model): 
 	courseChoices = models.ManyToManyField(CourseChoice, related_name='courses', blank=True)
 	semesters = models.ManyToManyField(Semester, related_name='courses', blank=True)
 	courseGroups = models.ManyToManyField(CourseGroup, related_name='courses', blank=True)
-	#hardcoded for TAMU department names and course numbers
-	#below are basically static fields
 	department = models.CharField(max_length=4)
-	number = models.IntegerField(default=0) #specify length or max
-	hours = models.IntegerField(default=0) #specify length or max
+	number = models.IntegerField(default=0)
+	hours = models.IntegerField(default=0) 
 	name = models.CharField(max_length=200, blank=True)
 
 	def __unicode__(self):

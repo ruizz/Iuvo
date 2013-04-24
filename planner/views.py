@@ -1,6 +1,3 @@
-# Create your views here.
-
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import Context, loader
 from planner.models import *
