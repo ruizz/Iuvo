@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import models
 	
 class UserAccount(models.Model):
 	#One DegreePlan and DegreeSchedule implicit
