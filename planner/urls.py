@@ -4,9 +4,9 @@ from planner import views
 urlpatterns = patterns('',
 	# ex: /planner/
 	url(r'^$', views.index, name='index'),
-	# ex: /planner/u/john.doe/
-	url(r'^u/(?P<username>[A-Za-z0-9.-_]+)/$', 
+	# ex: /planner/user/john.doe/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/account/$', 
 		views.userAccountView, name='userAccount'),
-	# ex: /planner/dp/1/
-	url(r'^dp/(?P<dpID>\d+)/$', views.degreePlanView, name='degreePlan'),
+	# ex: /planner/user/john.doe/degreeplans/1/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/degreeplans/(?P<dpID>\d+)/$', views.degreePlanView, name='degreePlan'),
 )

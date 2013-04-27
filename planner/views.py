@@ -14,7 +14,8 @@ def userAccountView(request, username):
 	
 	return render(request, 'planner/userAccount.html', context)
 
-def degreePlanView(request, dpID):
+def degreePlanView(request, username, dpID):
+	userAccount = get_object_or_404(UserAccount, username=username)
 	degreePlan = get_object_or_404(DegreePlan, id=dpID)
-	context = { 'degreePlan': degreePlan}
+	context = { 'userAccount': userAccount, 'degreePlan': degreePlan}
 	return render(request, 'planner/degreePlan.html', context)
