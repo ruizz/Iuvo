@@ -1,5 +1,5 @@
 from django.db import models
-from django.db import models
+from django import forms
 	
 class UserAccount(models.Model):
 	#One Personal Info, Degree plan, and degree schedule implicit
