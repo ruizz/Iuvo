@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block navDashboardSelected %}
+ class="active"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	
+	<div class="row">
+		<div class="span6">
+			<h1>My Dashboard</h1>
+			<p>Welcome</p>
+		</div>
+	</div>
+	
+	<div class="hero-unit">
+		<h3>Hello, {{ userAccount.firstName }}!</h3>
+		<p>Feel free to browse around. We'll have more stuff here later.</p>
+	</div>	
+{% endblock content %}

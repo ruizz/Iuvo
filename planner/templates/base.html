@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/static/css/bootstrap.css">
 		<link rel="stylesheet" href="/static/css/main.css">
-        <style>
+        <style>                      
             body {
 				padding-top: 60px;
                 padding-bottom: 40px;
@@ -26,8 +26,6 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
-
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -37,47 +35,43 @@
                         <span class="icon-bar"></span>
                     </a>
                     <a class="brand" href="#">iuvo</a>
+					{% block navBarButtons %}
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li><a href="#">Home</a></li>
+                            <li{%block navDashboardSelected %}{% endblock %}><a href="{% url 'dashboard' username=userAccount.username %}">Home</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Navigate<b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{% url 'degreePlan' username=userAccount.username %}">My Degree Plans</a></li>
-                                    <li><a href="#">Share or Export</a></li>
+                                <ul class="dropdown-menu active">
+									<li class="nav-header">{{ userAccount.firstName }}</li>
+                                    <li{%block navDegreePlanSelected %}{% endblock %}><a href="{% url 'degreePlan' username=userAccount.username %}">My Degree Plan</a></li>
+									<li{%block navScheduleSelected %}{% endblock %}><a href="{% url 'schedule' username=userAccount.username %}">My Schedule</a></li>
+                                    <li class="divider"></li>
+                                    <li class="nav-header">Social</li>
+									<li><a href="#">Share</a></li>
+									<li><a href="#">Export</a></li>
                                     <li class="divider"></li>
                                     <li class="nav-header">Settings</li>
-                                    <li><a href="{% url 'userAccount' username=userAccount.username %}">My Account</a></li>
+                                    <li{%block navAccountSelected %}{% endblock %}><a href="{% url 'userAccount' username=userAccount.username %}">My Account</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </div><!--/.nav-collapse -->
-                </div>
+					{% endblock %}
+                </div><!--/container -->
             </div>
         </div>
 
-        <div class="container">
-			<!-- Example row of columns -->
-			<div class="row">
-                <div class="span6">
-                    <h1>My Account</h1>
-					<p>Everything about you.</p>
-                </div>
-            </div>
-			
-			<div class="hero-unit">
-				<h3>Edit your account info here. Someday.</h3>
-				<p>First Name: {{ userAccount.firstName }}</p>
-				<p>Last Name: {{ userAccount.lastName }}</p>
-				<p>Username: {{ userAccount.username }}</p>
-				<p>School: {{ userAccount.school }}</p>
-			</div>
+		{% block content %}
+		{% endblock content %}
+		<!--
+		<div class="container">
+			<footer>
+					<p> iuvo, a Spring 2013 CSCE 315 Project</p>
+			</footer>
+		</div>-->
 
-            <footer>
-                <p> iuvo, a Spring 2013 CSCE 315 Project</p>
-            </footer>
-
-        </div> <!-- /container -->
+		
+		
         <script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
 
         <script src="/static/js/vendor/bootstrap.min.js"></script>
@@ -86,4 +80,3 @@
 		
     </body>
 </html>
-	

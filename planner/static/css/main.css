@@ -4,6 +4,10 @@
    Author's custom styles
    ========================================================================== */
 
+p {
+	font-size: 14px;
+}
+   
 body {
 	font-family: "Open Sans", sans-serif;
 	font-size: 12px;
@@ -15,9 +19,9 @@ body {
 	background-size: cover;
 }
 
-p {
-	font-size: 14px;
-	text-shadow: black 0.0em 0.0em 0.1em;
+/*Prevent dropdown menu from display shadows*/
+.dropdown-menu {
+	text-shadow: none;
 }
 
 .loginContainer {
@@ -25,11 +29,24 @@ p {
 	margin: 0 auto; 
 }
 
+.container {
+	text-shadow: #002550 0.0em 0.0em 0.3em;
+}
+
+.container h1 {
+	text-shadow: #002550 0.0em 0.0em 0.2em;
+}
+
+.container .hero-unit {
+	text-shadow: none;
+}
+
 .span6Right {
 	text-align:right;
 	width: 460px;
 }
 
+/*Black, transparent, rounded boxes that hold content*/
 .hero-unit {
 	padding-bottom: 20px;
 	padding-top: 20px;
@@ -45,21 +62,37 @@ p {
 			border-radius: 10px;
 }
 
-.hero-unit h1 {
-  margin-bottom: 0;
-  font-size: 40px;
-  line-height: 1;
-  letter-spacing: -1px;
-  color: white;
+h4 {
+	font-size: 18px;
 }
 
+/*For button font*/
+input, button, select, textarea {
+  font-family: "Open Sans", sans-serif;
+}
 
+/*For colored buttons*/
+.btn {
+	font-size: 12px;
+}
 
+/*For colored buttons*/
+.btn-group > .btn {
+	font-size: 12px;
+}
 
+/*Fixed button width for the course buttons*/
+.btn-course {
+    width: 120px !important;
+}
 
+.btn-course-dropdown-left {
+    width: 93px !important;
+}
 
-
-
+.btn-course-dropdown-right {
+    width: 27px !important;
+}
 
 
 

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block navDegreePlanSelected %}
+ class="active"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<!-- Example row of columns -->
+	<div class="row">
+		<div class="span6">
+			<h1>My Degree Plan</h1>
+			<p>{{ degreePlan.name }}</p>
+		</div>
+		<div class="span6Right">
+			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>
+			<p>{{ userAccount.school }} </p>
+		</div>
+	</div>
+	
+	<!-- Main hero unit for a primary marketing message or call to action -->
+	<div class="hero-unit">
+		<div class="equal row-fluid">
+			<div class="span4">
+				{% for cg in degreePlan.courseGroups.all %}
+					{% if cg.id < 4 %}
+					<h4>{{ cg.name }}</h4>
+						{% for course in cg.courses.all %}
+							<p><button class="btn btn-course" type="submit">{{ course }}</button></p>
+						{% empty %}
+							<p><div class="btn-group">
+								<button class="btn btn-course-dropdown-left btn-danger">EMPTY</button>
+								<button class="btn btn-course-dropdown-right btn-danger dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">Sample Course 1</a></li>
+									<li><a href="#">Sample Course 2</a></li>
+								</ul>
+							</div></p>
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="span4">
+				{% for cg in degreePlan.courseGroups.all %}
+					{% if cg.id < 8 and cg.id > 3 %}
+					<h4>{{ cg.name }}</h4>
+						{% for course in cg.courses.all %}
+							<p><button class="btn btn-course" type="submit">{{ course }}</button></p>
+						{% empty %}
+							<p><div class="btn-group">
+								<button class="btn btn-course-dropdown-left btn-danger">EMPTY</button>
+								<button class="btn btn-course-dropdown-right btn-danger dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">Sample Course 1</a></li>
+									<li><a href="#">Sample Course 2</a></li>
+								</ul>
+							</div></p>
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="span4">
+				{% for cg in degreePlan.courseGroups.all %}
+					{% if cg.id < 14 and cg.id > 7 %}
+					<h4>{{ cg.name }}</h4>
+						{% for course in cg.courses.all %}
+							<p><button class="btn btn-course" type="submit">{{ course }}</button></p>
+						{% empty %}
+							<p><div class="btn-group">
+								<button class="btn btn-course-dropdown-left btn-danger">EMPTY</button>
+								<button class="btn btn-course-dropdown-right btn-danger dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">Sample Course 1</a></li>
+									<li><a href="#">Sample Course 2</a></li>
+								</ul>
+							</div></p>
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock content %}

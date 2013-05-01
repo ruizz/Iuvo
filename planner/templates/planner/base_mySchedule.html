@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block navScheduleSelected %}
+ class="active"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	
+	<div class="row">
+		<div class="span6">
+			<h1>My Schedule</h1>
+			<p>X % Completed</p>
+		</div>
+		<div class="span6Right">
+			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>
+			<p>{{ userAccount.school }} </p>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span3">
+			<div class="hero-unit">
+				<h4>Not Scheduled</h4>
+				{% for cg in degreePlan.courseGroups.all %}
+					{% for course in cg.courses.all %}
+							<p align="center"><button class="btn btn-course" type="submit">{{ course }}</button></p>
+					{% endfor %}
+				{% endfor %}
+			</div>
+		</div>
+		
+		<div class="span9">
+			<div class="hero-unit">
+				<p>Schedule goes here. Two semesters per row.</p>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+
+
+{% endblock content %}
