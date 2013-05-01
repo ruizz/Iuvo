@@ -7,6 +7,7 @@ class UserAccount(models.Model):
 	lastName = models.CharField(max_length=200)
 	username = models.CharField(max_length=200)
 	school = models.CharField(max_length=200)
+	degreePlan = models.ForeignKey('DegreePlan', related_name='userAccounts')
 	# need dropbox and facebook account data
 
 	def __unicode__(self):
@@ -14,7 +15,6 @@ class UserAccount(models.Model):
 
 class DegreePlan(models.Model):
 	#Many courseGroups implicit
-	userAccount = models.OneToOneField(UserAccount, related_name='degreePlan')
 	name = models.CharField(max_length=200)
 	major = models.CharField(max_length=200) # not sure what this is
 
