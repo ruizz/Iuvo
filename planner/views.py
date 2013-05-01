@@ -29,3 +29,8 @@ def scheduleView(request, username):
 	degreePlan = userAccount.degreePlan
 	context = { 'userAccount': userAccount, 'degreePlan': degreePlan}
 	return render(request, 'planner/base_mySchedule.html', context)
+
+def dropboxLink(request):
+	# code to send user to dropbox
+	
+	pass
