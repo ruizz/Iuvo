@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import Context, RequestContext, loader
 from planner.models import *
+from dropbox import client, rest, session
 
 def index(request):
 	logout(request)
