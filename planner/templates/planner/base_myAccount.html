@@ -12,13 +12,28 @@
 			<h1>My Account</h1>
 			<p>Everything about you.</p>
 		</div>
-	</div>		
+	</div>
 	<div class="hero-unit">
-		<h3>Edit your account info here. Someday.</h3>
-		<p>First Name: {{ userAccount.firstName }}</p>
-		<p>Last Name: {{ userAccount.lastName }}</p>
-		<p>Username: {{ userAccount.username }}</p>
-		<p>School: {{ userAccount.school }}</p>
+		
+			<h3>Edit your account info here. Someday.</h3>
+			<p>First Name: {{ userAccount.firstName }}</p>
+			<p>Last Name: {{ userAccount.lastName }}</p>
+			<p>Username: {{ userAccount.username }}</p>
+			<p>School: {{ userAccount.school }}</p>
+		<div class="equal row-fluid">
+			<div class="span5">
+				<h3>Dropbox Status</h3>
+				<p>You are either linked or not linked to Dropbox. I'll tell you one day.</p>
+				<button class="btn btn-large btn-primary" type="submit">Link to Dropbox</button>
+			</div>
+			<div class="span2">
+			</div>
+			<div class="span5">
+				<h3>Facebook Status</h3>
+				<p>You are either linked or not linked to Facebook. I'll tell you one day.</p>
+				<button class="btn btn-large btn-primary" type="submit">Link to Facebook</button>
+			</div>
+		</div>
 	</div>
 {% endblock content %}
 	

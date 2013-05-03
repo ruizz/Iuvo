@@ -6,12 +6,15 @@
 {% block content %}
 <div class="loginContainer">
 	<div class="hero-unit">
-		<form class="form-signin">
+		<form class="form-signin" action="" method="post">{% csrf_token %}
 			<h2 align="center">Welcome.</h2>
-			<input type="text" class="input-block-level" placeholder="Email address">
-			<input type="password" class="input-block-level" placeholder="Password">
+			<div class="alert">
+				{{ state }}
+			</div>
+			<input type="text" name="username" class="input-block-level" placeholder="User Name">
+			<input type="password" name="password" class="input-block-level" placeholder="Password">
 			<label class="checkbox"><input type="checkbox" value="remember-me"> Remember me</label>
-			<button class="btn" type="submit">Sign in</button>
+			<button class="btn" type="submit" value="login">Sign in</button>
 		</form>
 	</div> <!-- /hero-unit -->
 </div>

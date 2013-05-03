@@ -46,6 +46,12 @@ body {
 	width: 460px;
 }
 
+.span3Right {
+	text-align:right;
+	width: 220px;
+}
+
+
 /*Black, transparent, rounded boxes that hold content*/
 .hero-unit {
 	padding-bottom: 20px;
@@ -94,7 +100,6 @@ input, button, select, textarea {
     width: 27px !important;
 }
 
-
-
-
-
+.modal {
+	color: #333333;
+}

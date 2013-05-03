@@ -46,29 +46,30 @@
                                     <li{%block navDegreePlanSelected %}{% endblock %}><a href="{% url 'degreePlan' username=userAccount.username %}">My Degree Plan</a></li>
 									<li{%block navScheduleSelected %}{% endblock %}><a href="{% url 'schedule' username=userAccount.username %}">My Schedule</a></li>
                                     <li class="divider"></li>
-                                    <li class="nav-header">Social</li>
-									<li><a href="#">Share</a></li>
-									<li><a href="#">Export</a></li>
+                                    <li class="nav-header">Backup</li>
+									<li{%block navExportSelected %}{% endblock %}><a href="{% url 'export' username=userAccount.username %}">Export</a></li>
                                     <li class="divider"></li>
                                     <li class="nav-header">Settings</li>
                                     <li{%block navAccountSelected %}{% endblock %}><a href="{% url 'userAccount' username=userAccount.username %}">My Account</a></li>
                                 </ul>
                             </li>
+							<li><a href="{% url 'index' %}">Logout</a></li>
                         </ul>
+						<a class="navbar-text pull-right">{% now "D, F j, Y, g:i A" %}</a>
                     </div><!--/.nav-collapse -->
-					{% endblock %}
+					{% endblock navBarButtons %}
                 </div><!--/container -->
             </div>
         </div>
 
 		{% block content %}
 		{% endblock content %}
-		<!--
+
 		<div class="container">
 			<footer>
 					<p> iuvo, a Spring 2013 CSCE 315 Project</p>
 			</footer>
-		</div>-->
+		</div>
 
 		
 		
