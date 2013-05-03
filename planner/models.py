@@ -2,7 +2,6 @@ from django.db import models
 	
 class UserAccount(models.Model):
 	#One DegreePlan and DegreeSchedule implicit
-
 	firstName = models.CharField(max_length=200)
 	lastName = models.CharField(max_length=200)
 	username = models.CharField(max_length=200)

@@ -25,7 +25,7 @@
 			<div class="span4">
 				{% for cg in degreePlan.courseGroups.all %}
 					{% if cg.id < 4 %}
-					<h4>{{ cg.name }}</h4>
+						<h4>{{ cg.name }}</h4>
 						{% for course in cg.courses.all %}
 							<p><button class="btn btn-course" type="submit">{{ course }}</button></p>
 						{% empty %}
@@ -87,4 +87,11 @@
 			</div>
 		</div>
 	</div>
+	
+	{% block testme %}
+	
+	{% endblock %}
+	
+	
+</div>
 {% endblock content %}
