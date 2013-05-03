@@ -7,6 +7,8 @@ class UserAccount(models.Model):
 	lastName = models.CharField(max_length=200)
 	username = models.CharField(max_length=200)
 	school = models.CharField(max_length=200)
+	dropboxLinked = models.BooleanField(default=False)
+	dropboxToken = models.CharField(max_length=50, default="")
 	# need dropbox and facebook account data
 
 	def __unicode__(self):
@@ -25,6 +27,7 @@ class CourseGroup(models.Model):
 	#Many CourseChoices implicit
 	degreePlan = models.ForeignKey(DegreePlan, related_name='courseGroups')
 	name = models.CharField(max_length=200)
+	colNum = models.IntegerField(default=1)
 
 	def __unicode__(self):
 		return self.name
@@ -33,16 +36,12 @@ class CourseChoice(models.Model): #dynamic course, choose these
 	#Many Courses impicit, or just one
 	name = models.CharField(max_length=200)
 	courseGroup = models.ForeignKey(CourseGroup, related_name='courseChoices')
-	courseSelected = models.BooleanField(default=False)
-	selectedCourse = models.ForeignKey('Course')
+	# courseSelected = models.BooleanField(default=False)
+	# selectedCourse = models.ForeignKey('Course')
 	required = models.BooleanField(default=False) 
 
 	def __unicode__(self):
-		if courseSelected:
-			sel = selectedCourse.__unicode__()
-		else :
-			sel = "no selection"
-		return self.name + "(" + sel + ")"
+		return name
 	
 class DegreeSchedule(models.Model): 
 	# many Semesters implicit
@@ -72,3 +71,11 @@ class Course(models.Model):
 
 	def __unicode__(self):
 		return self.department + " " + str(self.number) + " (" + str(self.hours) + ")" 
+
+class CourseSelection(models.Model):
+    course = models.ForeignKey(Course, related_name='selections')
+    userAccount = models.ForeignKey(UserAccount, related_name='selections')
+    courseChoice = models.ForeignKey(CourseChoice, related_name='selections')
+
+    def __unicode__(self):
+        pass
