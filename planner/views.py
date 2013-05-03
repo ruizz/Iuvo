@@ -68,6 +68,10 @@ def toDropboxLink(request, username):
 @login_required
 def fromDropboxLink(request, username):
 	
+	# token = ''
+	# account = get_object_or_404(UserAccount, username=username)
+	# account.dropboxLinked = True
+	# account.dropboxToken = token
+	# account.save()
 
-	
 	pass
