@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import Context, RequestContext, loader
 from planner.models import *
 
@@ -60,7 +60,14 @@ def exportView(request, username):
 	return render(request, 'planner/base_export.html', context)
 
 @login_required
-def dropboxLink(request):
+def toDropboxLink(request, username):
 	# code to send user to dropbox
+	url = ''#build_authorize_url( token, reverse('fromDropbox' username=username))
+	return redirect(url)
+
+@login_required
+def fromDropboxLink(request, username):
+	
+
 	
 	pass

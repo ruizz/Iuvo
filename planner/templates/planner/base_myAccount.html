@@ -24,7 +24,7 @@
 			<div class="span5">
 				<h3>Dropbox Status</h3>
 				<p>You are either linked or not linked to Dropbox. I'll tell you one day.</p>
-				<button class="btn btn-large btn-primary" type="submit">Link to Dropbox</button>
+				<button class="btn btn-large btn-primary" type="submit" href="{% url 'toDropbox' username=userAccount.username %}">Link to Dropbox</button>
 			</div>
 			<div class="span2">
 			</div>
