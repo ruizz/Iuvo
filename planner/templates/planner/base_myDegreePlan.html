@@ -22,76 +22,37 @@
 	<!-- Main hero unit for a primary marketing message or call to action -->
 	<div class="hero-unit">
 		<div class="equal row-fluid">
+			{% load my_filters %}
+			{% for i in 3|times %}
 			<div class="span4">
-				{% for cg in degreePlan.courseGroups.all %}
-					{% if cg.id < 4 %}
+				{% for cg in degreePlan.coursegroup_set.all %}
+					{% if cg.columnNumber == i %}
 						<h4>{{ cg.name }}</h4>
-						{% for course in cg.courses.all %}
-							<p><button class="btn btn-course" type="submit">{{ course }}</button></p>
-						{% empty %}
+						{% for cc in cg.courseslot_set.all %}
+						{% if not cc.isDepartmentEditable and not cc.isNumberEditable %}
+							<p><button class="btn btn-course" type="submit">{{ cc.department }} {{ cc.number }} ({{cc.hours}})</button></p>
+						{% else %}
 							<p><div class="btn-group">
-								<button class="btn btn-course-dropdown-left btn-danger">EMPTY</button>
-								<button class="btn btn-course-dropdown-right btn-danger dropdown-toggle" data-toggle="dropdown">
+								<button class="btn btn-course-dropdown-left">{{ cc }}</button>
+								<button class="btn btn-course-dropdown-right btn-info dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
-									<li><a href="#">Sample Course 1</a></li>
-									<li><a href="#">Sample Course 2</a></li>
+									{% if cc.isDepartmentEditable and cc.isNumberEditable %}
+										<li><a href="#">Edit Department and Number</a></li>
+									{% else %}
+										{% if cc.isDepartmentEditable %}<li><a href="#">Edit Department</a></li>{% endif %}
+										{% if cc.isNumberEditable %}<li><a href="#">Edit Number</a></li>{% endif %}
+									{% endif %}
 								</ul>
 							</div></p>
+						{% endif %}
 						{% endfor %}
 					{% endif %}
 				{% endfor %}
 			</div>
-			<div class="span4">
-				{% for cg in degreePlan.courseGroups.all %}
-					{% if cg.id < 8 and cg.id > 3 %}
-					<h4>{{ cg.name }}</h4>
-						{% for course in cg.courses.all %}
-							<p><button class="btn btn-course" type="submit">{{ course }}</button></p>
-						{% empty %}
-							<p><div class="btn-group">
-								<button class="btn btn-course-dropdown-left btn-danger">EMPTY</button>
-								<button class="btn btn-course-dropdown-right btn-danger dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Sample Course 1</a></li>
-									<li><a href="#">Sample Course 2</a></li>
-								</ul>
-							</div></p>
-						{% endfor %}
-					{% endif %}
-				{% endfor %}
-			</div>
-			<div class="span4">
-				{% for cg in degreePlan.courseGroups.all %}
-					{% if cg.id < 14 and cg.id > 7 %}
-					<h4>{{ cg.name }}</h4>
-						{% for course in cg.courses.all %}
-							<p><button class="btn btn-course" type="submit">{{ course }}</button></p>
-						{% empty %}
-							<p><div class="btn-group">
-								<button class="btn btn-course-dropdown-left btn-danger">EMPTY</button>
-								<button class="btn btn-course-dropdown-right btn-danger dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Sample Course 1</a></li>
-									<li><a href="#">Sample Course 2</a></li>
-								</ul>
-							</div></p>
-						{% endfor %}
-					{% endif %}
-				{% endfor %}
-			</div>
+			{% endfor %}
 		</div>
 	</div>
-	
-	{% block testme %}
-	
-	{% endblock %}
-	
-	
 </div>
 {% endblock content %}

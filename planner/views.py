@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import Context, RequestContext, loader
 from planner.models import *
@@ -24,41 +24,67 @@ def index(request):
 				state = "Inactive account."
 		else:
 			state = "Incorrect username/password."
-	return render_to_response('planner/base_login.html', {'state':state, 'username': username}, context_instance=RequestContext(request))
+	return render_to_response('planner/base_login.html', {'state':state, 'username':username}, context_instance=RequestContext(request))
 
 @login_required
 def dashboardView(request, username):
+	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
-	degreePlan = userAccount.degreePlan
-	context = { 'userAccount': userAccount, 'degreePlan': degreePlan}
-	return render(request, 'planner/base_myDashboard.html', context)
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_myDashboard.html', context)
+	else:
+		raise Http404
 
 @login_required
 def userAccountView(request, username):
+	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
-	context = {	'userAccount': userAccount	}
-	return render(request, 'planner/base_myAccount.html', context)
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_myAccount.html', context)
+	else:
+		raise Http404
 
 @login_required
 def degreePlanView(request, username):
+	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
-	degreePlan = userAccount.degreePlan
-	context = { 'userAccount': userAccount, 'degreePlan': degreePlan}
-	return render(request, 'planner/base_myDegreePlan.html', context)
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_myDegreePlan.html', context)
+	else:
+		raise Http404
 
 @login_required
 def scheduleView(request, username):
+	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
-	degreePlan = userAccount.degreePlan
-	context = { 'userAccount': userAccount, 'degreePlan': degreePlan}
-	return render(request, 'planner/base_mySchedule.html', context)
-	
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_mySchedule.html', context)
+	else:
+		raise Http404
+
 @login_required
 def exportView(request, username):
+	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
-	degreePlan = userAccount.degreePlan
-	context = { 'userAccount': userAccount, 'degreePlan': degreePlan}
-	return render(request, 'planner/base_export.html', context)
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_export.html', context)
+	else:
+		raise Http404
 
 @login_required
 def toDropboxLink(request, username):
