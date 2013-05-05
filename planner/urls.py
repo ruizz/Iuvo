@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 from planner import views
 
 urlpatterns = patterns('',
-
+	
 	# Logs the user out if logged in.
 	# ex: /
 	url(r'^$', views.index, name='index'),
@@ -11,10 +11,10 @@ urlpatterns = patterns('',
 	url(r'^register/$', views.registerView, name='register'),
 	
 	# ex: /facebook/
-	url(r'^/register/facebook/$', views.toFacebookLink, name='facebook'),
+	url(r'^register/facebook/$', views.toFacebookLink, name='facebook'),
 	
-	# ex: /facebook/
-	url(r'^/register/facebook/return$', views.fromFacebookLink, name='facebookReturn'),
+	# ex: /facebook/return/
+	url(r'^register/facebook/return$', views.fromFacebookLink, name='facebookReturn'),
 	
 	# ex: /user/john.doe/dashboard/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/dashboard/$', views.dashboardView, name='dashboard'),

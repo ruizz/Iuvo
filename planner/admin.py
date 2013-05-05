@@ -34,7 +34,7 @@ class CourseGroupAdmin(admin.ModelAdmin):
 	list_display = ('name', 'degreePlan', )
 	
 class CourseSlotAdmin(admin.ModelAdmin):
-	list_display = ('department', 'number', 'hours', 'isDepartmentEditable', 'isNumberEditable', 'isScheduled', 'notes', 'courseGroup', 'semester', )
+	list_display = ('department', 'number', 'hours', 'isCompleted', 'isDepartmentEditable', 'isNumberEditable', 'isScheduled', 'notes', 'courseGroup', 'semester', )
 	
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(DegreePlan, DegreePlanAdmin)

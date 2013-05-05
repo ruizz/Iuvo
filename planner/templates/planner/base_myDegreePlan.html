@@ -29,24 +29,7 @@
 					{% if cg.columnNumber == i %}
 						<h4>{{ cg.name }}</h4>
 						{% for cc in cg.courseslot_set.all %}
-						{% if not cc.isDepartmentEditable and not cc.isNumberEditable %}
-							<p><button class="btn btn-course" type="submit">{{ cc.department }} {{ cc.number }} ({{cc.hours}})</button></p>
-						{% else %}
-							<p><div class="btn-group">
-								<button class="btn btn-course-dropdown-left">{{ cc }}</button>
-								<button class="btn btn-course-dropdown-right btn-info dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									{% if cc.isDepartmentEditable and cc.isNumberEditable %}
-										<li><a href="#">Edit Department and Number</a></li>
-									{% else %}
-										{% if cc.isDepartmentEditable %}<li><a href="#">Edit Department</a></li>{% endif %}
-										{% if cc.isNumberEditable %}<li><a href="#">Edit Number</a></li>{% endif %}
-									{% endif %}
-								</ul>
-							</div></p>
-						{% endif %}
+							<p><a href="#"><button class="btn btn-course {% if cc.isCompleted %}btn-success{% endif %}">{{ cc }}</button></a></p>
 						{% endfor %}
 					{% endif %}
 				{% endfor %}

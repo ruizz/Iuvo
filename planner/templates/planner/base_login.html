@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
-{% block navBarButtons %}
+{% block navBarHome %}
+<a class="brand" href="{% url 'index' %}">iuvo</a>
+{% endblock navBarHome %}
 
+{% block navBarButtons %}
+<a class="navbar-text pull-right" href="{% url 'register' %}">New User?</a>
 {% endblock navBarButtons %}
 
 {% block content %}
@@ -17,8 +21,6 @@
 			<label class="checkbox"><input type="checkbox" value="remember-me"> Remember me</label>
 			<p align="center"><button class="btn" type="submit" value="login">Sign in</button></p>
 		</form>
-		<h2 align="center">New User?</h2>
-		<p align="center"><a href="{% url 'register' %}"><button class="btn" type="submit" value="login">Register</button></p></a>
 	</div> <!-- /hero-unit -->
 </div>
 {% endblock content %}

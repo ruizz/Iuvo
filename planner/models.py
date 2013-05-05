@@ -8,7 +8,7 @@ class UserAccount(models.Model):
 	dropboxLinked = models.BooleanField(default=False)
 	dropboxToken = models.CharField(max_length=50, default="", blank=True)
 	facebookLinked = models.BooleanField(default=False)
-	facebookToken = models.CharField(max_length=50, default="", blank=True)
+	facebookToken = models.CharField(max_length=200, default="", blank=True)
 	def __unicode__(self):
 		return self.lastName + ", " + self.firstName
 	
@@ -45,6 +45,7 @@ class CourseSlot(models.Model):
 	department = models.CharField(max_length=4, blank=True)
 	number = models.IntegerField(default=0, blank=True)
 	hours = models.IntegerField(default=3)
+	isCompleted = models.BooleanField(default=False)
 	isDepartmentEditable = models.BooleanField(default=False)
 	isNumberEditable = models.BooleanField(default=False)
 	isScheduled = models.BooleanField(default=False)
