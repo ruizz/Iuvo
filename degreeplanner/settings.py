@@ -3,7 +3,8 @@ import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
+FACEBOOK_APP_ID='197588320365151'
+FACEBOOK_API_SECRET='b654c9c0daad222b60bc62c5d04f4f8d'
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -121,7 +122,9 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
-
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+)
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -7,6 +7,15 @@ urlpatterns = patterns('',
 	# ex: /
 	url(r'^$', views.index, name='index'),
 
+	# ex: /register/
+	url(r'^register/$', views.registerView, name='register'),
+	
+	# ex: /facebook/
+	url(r'^/register/facebook/$', views.toFacebookLink, name='facebook'),
+	
+	# ex: /facebook/
+	url(r'^/register/facebook/return$', views.fromFacebookLink, name='facebookReturn'),
+	
 	# ex: /user/john.doe/dashboard/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/dashboard/$', views.dashboardView, name='dashboard'),
 	

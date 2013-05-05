@@ -26,6 +26,10 @@ def index(request):
 			state = "Incorrect username/password."
 	return render_to_response('planner/base_login.html', {'state':state, 'username':username}, context_instance=RequestContext(request))
 
+def registerView(request):
+	logout(request)
+	return render(request, 'planner/base_register.html')
+	
 @login_required
 def dashboardView(request, username):
 	loggedInUser = request.user.username
@@ -94,6 +98,22 @@ def toDropboxLink(request, username):
 
 @login_required
 def fromDropboxLink(request, username):
+	
+	# token = ''
+	# account = get_object_or_404(UserAccount, username=username)
+	# account.dropboxLinked = True
+	# account.dropboxToken = token
+	# account.save()
+
+	pass
+	
+
+def toFacebookLink(request, username):
+	# code to send user to dropbox
+	url = ''
+	return redirect(url)
+
+def fromFacebookLink(request, username):
 	
 	# token = ''
 	# account = get_object_or_404(UserAccount, username=username)
