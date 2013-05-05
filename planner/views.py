@@ -189,14 +189,19 @@ def fromFacebookLink(request):
 	fql_query_url = urllib.quote(fql_query_url)+"()"
 	url = "https://graph.facebook.com/fql?q=" + fql_query_url + '&access_token='+access_token
 	data = urllib.urlopen(url).read()
-	#print('\n'+data+'\n')
+	#TODO store access token, and expire_time, and time initiated to check against
 	#take json data and put it in a form for the user to fill out, ask them for a username and password, 
 	#and any missing information
-	f = open('test.txt','w+')
-	f.write(data)
-	f.close()
 	pyData=json.loads(data)
-	returnTuple = pyData["data"][0]["first_name"],pyData["data"][0]["last_name"],pyData["data"][0]["email"],pyData["data"][0]["education"][1]["school"]["name"]
+	education = pyData["data"][0]["education"]
+	edu_var = ''
+	#iterate through their education history to find their college
+	for index in range(len(education)):
+		print education[index]
+		if education[index]['type'] == "College" :
+			print "found match"
+			edu_var = education[index]['school']['name']
+	returnTuple = pyData["data"][0]["first_name"],pyData["data"][0]["last_name"],pyData["data"][0]["email"],edu_var
 	#return back to the register view but fill in the fields
 	return registerView(request, returnTuple)
 	
