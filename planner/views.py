@@ -141,6 +141,69 @@ def scheduleView(request, username):
 	else:
 		raise Http404
 
+def editCourseView(request, username, coursepk):
+	state = ""
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	courseSlot = get_object_or_404(CourseSlot, pk=coursepk)
+	
+	if loggedInUser == username:
+		# prevent user from viewing course from another user
+		if not courseSlot.courseGroup.degreePlan.userAccount == userAccount:
+			raise Http404
+		
+		if request.POST:
+			department = request.POST.get('department')
+			number = request.POST.get('number')
+			isCourseCompleted = request.POST.get('courseCompletedOption')
+			semester = request.POST.get('semesterOption')
+			
+			print(department)
+			print(number)
+			print(isCourseCompleted)
+			print(semester)
+			
+			if department:
+				courseSlot.department = department
+			if number:
+				courseSlot.number = number
+			if isCourseCompleted == "True":
+				courseSlot.isCompleted = True
+			if isCourseCompleted == "False":
+				courseSlot.isCompleted = False
+				
+			if semester:
+				if semester == "No Selection":
+					courseSlot.semester = None
+					courseSlot.isScheduled = False
+				if not semester == "No Selection":
+					term = semester[:2]
+					year = semester[3:7]
+					userSemester = Semester.objects.get(term=term, year=year, userAccount=userAccount)
+					courseSlot.semester = userSemester
+					courseSlot.isScheduled = True
+			
+			courseSlot.save()
+			state="Changes saved!"
+	else:
+		raise Http404
+		
+	return render_to_response('planner/base_editCourse.html', {'state':state, 'username':username, 'userAccount':userAccount, 'courseSlot':courseSlot, }, context_instance=RequestContext(request))
+
+		
+@login_required
+def degreePlanView(request, username):
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_myDegreePlan.html', context)
+	else:
+		raise Http404	
+		
+		
 @login_required
 def exportView(request, username):
 	loggedInUser = request.user.username

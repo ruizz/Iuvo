@@ -51,7 +51,7 @@ class CourseSlot(models.Model):
 	isScheduled = models.BooleanField(default=False)
 	notes = models.CharField(max_length=1000, null=True, blank=True)
 	courseGroup = models.ForeignKey(CourseGroup, null=True, blank=True)
-	semester = models.ForeignKey(Semester, null=True, blank=True)
+	semester = models.ForeignKey(Semester, null=True, blank=True, on_delete=models.SET_NULL)
 	def __unicode__(self):
 		return self.department + " " + str(self.number) + " (" + str(self.hours) + ")"
 		

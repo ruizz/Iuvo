@@ -7,6 +7,14 @@
 p {
 	font-size: 14px;
 }
+
+a {
+	color: white;
+}
+
+a:hover {
+	color: white;
+}
    
 body {
 	font-family: "Open Sans", sans-serif;
@@ -17,6 +25,11 @@ body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+}
+
+/* For prepend, append forms */
+.input-append .add-on, .input-prepend .add-on {
+	color: black;
 }
 
 /*Prevent dropdown menu from display shadows*/

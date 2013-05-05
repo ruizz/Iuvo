@@ -10,7 +10,7 @@
 	<div class="row">
 		<div class="span6">
 			<h1>My Schedule</h1>
-			<p>X % Completed</p>
+			<p>{{ degreePlan.name }}</p>
 		</div>
 		<div class="span6Right">
 			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>
@@ -25,23 +25,7 @@
 				{% for cg in degreePlan.coursegroup_set.all %}
 					{% for cs in cg.courseslot_set.all %}
 						{% if not cs.isScheduled %}
-							<!-- Button to trigger modal -->
-							<a href="#myModal" role="button" class="btn btn-course" data-toggle="modal">{{ cs }}</a>
-							
-							<!-- Modal -->
-							<div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-									<h3 id="myModalLabel">Select a semester...</h3>
-								</div>
-								<div class="modal-body">
-									<p>Yeah, totally not happening yet.</p>
-								</div>
-								<div class="modal-footer">
-									<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-									<button class="btn btn-primary">Save</button>
-								</div>
-							</div>
+							<a href="{% url 'editCourse' username=userAccount.username coursepk=cs.pk %}"><button class="btn btn-course {% if cs.isCompleted %}btn-success{% endif %}">{{ cs }}</button></a>
 						{% endif %}
 					{% endfor %}
 				{% endfor %}
@@ -54,22 +38,7 @@
 				{% for s in semesters %}
 				<h3>{{ s.term }} {{ s.year }}</h3>
 					{% for cs in s.courseslot_set.all %}
-						<a href="#myModal" role="button" class="btn btn-course" data-toggle="modal">{{ cs }}</a>
-							
-							<!-- Modal -->
-							<div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-									<h3 id="myModalLabel">Select a semester...</h3>
-								</div>
-								<div class="modal-body">
-									<p>Yeah, totally not happening yet.</p>
-								</div>
-								<div class="modal-footer">
-									<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-									<button class="btn btn-primary">Save</button>
-								</div>
-							</div>
+						<a href="{% url 'editCourse' username=userAccount.username coursepk=cs.pk %}"><button class="btn btn-course {% if cs.isCompleted %}btn-success{% endif %}">{{ cs }}</button></a>
 					{% endfor %}
 				{% endfor %}
 				

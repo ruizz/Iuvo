@@ -10,23 +10,11 @@ urlpatterns = patterns('',
 	# ex: /register/
 	url(r'^register/$', views.registerView, name='register'),
 	
-	# ex: /facebook/
-	url(r'^register/facebook/$', views.toFacebookLink, name='facebook'),
-	
-	# ex: /facebook/return/
-	url(r'^register/facebook/return$', views.fromFacebookLink, name='facebookReturn'),
-	
 	# ex: /user/john.doe/dashboard/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/dashboard/$', views.dashboardView, name='dashboard'),
 	
 	# ex: /user/john.doe/account/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/account/$', views.userAccountView, name='userAccount'),
-
-	# ex: /user/john.doe/toDropbox/
-	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/toDropbox/$', views.toDropboxLink, name='toDropbox'),
-
-	# ex: /user/john.doe/fromDropbox/
-	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/fromDropbox/$', views.fromDropboxLink, name='fromDropbox'),
 		
 	# ex: /user/john.doe/degreeplan/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/degreeplan/$', views.degreePlanView, name='degreePlan'),
@@ -34,6 +22,21 @@ urlpatterns = patterns('',
 	# ex: /user/john.doe/schedule/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/schedule/$', views.scheduleView, name='schedule'),
 	
+	# ex: /user/john.doe/editcourse/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/editcourse/(?P<coursepk>[A-Za-z0-9.-_]+)/$', views.editCourseView, name='editCourse'),
+	
 	# ex: /user/john.doe/export/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/export/$', views.exportView, name='export'),
+	
+	# ex: /user/john.doe/toDropbox/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/toDropbox/$', views.toDropboxLink, name='toDropbox'),
+
+	# ex: /user/john.doe/fromDropbox/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/fromDropbox/$', views.fromDropboxLink, name='fromDropbox'),
+	
+	# ex: /facebook/
+	url(r'^register/facebook/$', views.toFacebookLink, name='facebook'),
+	
+	# ex: /facebook/return/
+	url(r'^register/facebook/return$', views.fromFacebookLink, name='facebookReturn'),
 )

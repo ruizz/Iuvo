@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block navDegreePlanSelected %}
+ class="active"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<!-- Example row of columns -->
+	<div class="row">
+		<div class="span6">
+			<h1>{{ courseSlot }}</h1>
+			<p><i class="icon-arrow-left icon-white"></i> <a href="{% url 'degreePlan' username=userAccount.username %}">Back to My Degree Plan</a> | <i class="icon-arrow-left icon-white"></i> <a href="{% url 'schedule' username=userAccount.username %}">Back to My Schedule</a></p>
+		</div>
+		<div class="span6Right">
+			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>
+			<p>{{ userAccount.school }} </p>
+		</div>
+	</div>
+	
+	<!-- Main hero unit for a primary marketing message or call to action -->
+	<div class="hero-unit">
+	{% if state == "Changes saved!"%}
+	<div class="alert">
+		{{ state }}
+	</div>
+	{% endif %}
+	<form class="form-signin" action="" method="post">{% csrf_token %}
+		<h4>Notes about this class</h4>
+			<p>
+			{% if courseSlot.notes %}{{ courseSlot.notes }}{% endif %}
+			{%if not courseSlot.notes %}None.{% endif%}
+			<p>
+		<h4>Name</h4>
+			{% if courseSlot.isDepartmentEditable and courseSlot.isNumberEditable %}
+			<div class="input-prepend input-append">
+				<span class="add-on"></span>
+				<input class="span2" name="department" type="text" placeholder="Department" value="{{ courseSlot.department }}">
+				<input class="span2" name="number" type="text" placeholder="Number" value="{{ courseSlot.number }}">
+				<span class="add-on"></span>
+			</div>
+			{% endif %}
+			{% if not courseSlot.isDepartmentEditable and courseSlot.isNumberEditable %}
+			<div class="input-prepend input-append">
+				<span class="add-on"></span>
+				<span class="span2 input-xlarge uneditable-input">{{ courseSlot.department }}</span>
+				<input class="span2" name="number" type="text" placeholder="Number" value="{{ courseSlot.number }}">
+				<span class="add-on"></span>
+			</div>
+			{% endif %}
+			{% if courseSlot.isDepartmentEditable and not courseSlot.isNumberEditable %}
+			<div class="input-prepend input-append">
+				<span class="add-on"></span>
+				<input class="span2" name="department" type="text" placeholder="Department" value="{{ courseSlot.department }}">
+				<span class="span2 input-xlarge uneditable-input">{{ courseSlot.number }}</span>
+				<span class="add-on"></span>
+			</div>
+			{% endif %}
+			{% if not courseSlot.isDepartmentEditable and not courseSlot.isNumberEditable %}
+			<div class="input-prepend input-append">
+				<span class="add-on"></span>
+				<span class="span2 input-xlarge uneditable-input">{{ courseSlot.department }}</span>
+				<span class="span2 input-xlarge uneditable-input">{{ courseSlot.number }}</span>
+				<span class="add-on"></span>
+			</div>
+			{% endif %}
+		<h4>Course Completed?</h4>
+			<label class="radio">
+				<input type="radio" name="courseCompletedOption" id="optionsRadios1" value="True" {% if courseSlot.isCompleted %}checked{% endif %}>
+				Yes!
+			</label>
+			<label class="radio">
+				<input type="radio" name="courseCompletedOption" id="optionsRadios2" value="False" {% if not courseSlot.isCompleted %}checked{% endif %}>
+				No...
+			</label>
+		<h4>Semester</h4>
+		<select name="semesterOption">
+			<option value="No Selection">None</option>
+			{% for semester in userAccount.semester_set.all %}
+			<option value="{{ semester }}" {% if courseSlot.semester == semester %} selected="selected" {% endif %}>{{ semester }}</option>
+			{% endfor %}
+		</select>
+		<p><button class="btn btn-large btn-primary" type="submit" value="save">Save Changes</button></p>
+	</form>
+	</div>
+</div>
+{% endblock content %}
