@@ -9,6 +9,8 @@ class UserAccount(models.Model):
 	dropboxToken = models.CharField(max_length=50, default="", blank=True)
 	facebookLinked = models.BooleanField(default=False)
 	facebookToken = models.CharField(max_length=1000, default="", blank=True)
+	def semesterOrder(self):
+		return self.semester_set.all().order_by('year')
 	def __unicode__(self):
 		return self.lastName + ", " + self.firstName
 	
@@ -20,30 +22,48 @@ class DegreePlan(models.Model):
 
 class Semester(models.Model):
 	TERMS = (
-		('FA', 'Fall'),
-		('SP', 'Spring'),
-		('SU', 'Summer'),
+		('CC', 'Fall'),
+		('AA', 'Spring'),
+		('BB', 'Summer'),
 		)
 	term = models.CharField(max_length=2, choices=TERMS)
 	year = models.IntegerField(default=20)
 	userAccount = models.ForeignKey(UserAccount, null=True, blank=True)
 	class Meta:
 		unique_together = ("term", "year", "userAccount",)
+	
+	def termFullName(self):
+		if self.term == "CC":
+			return "FALL"
+		elif self.term == "AA":
+			return "SPRING"
+		else:
+			return "SUMMER"
+	
 	def twitterString(self):
 		string = "I'm taking "
 		css = self.courseslot_set.all()
 		if css:
-			for cs in css:
-				if not cs == css[len(css)-1]:
-					string += cs.department + str(cs.number) + ", "
-				else:
-					string += "and " + cs.department + str(cs.number) + " "
+			if len(css) > 2:
+				for cs in css:
+					if not cs == css[len(css)-1]:
+						string += cs.department + " " + str(cs.number) + ", "
+					else:
+						string += "and " + cs.department + " " + str(cs.number) + " "
+			elif len(css) == 2:
+				for cs in css:
+					if not cs == css[len(css)-1]:
+						string += cs.department + " " + str(cs.number) + " "
+					else:
+						string += "and " + cs.department + " " + str(cs.number) + " "
+			else:
+				string += css[0].department + " " + str(css[0].number) + " "
 		else:
 			string += "nothing "
 		
-		if self.term == "SP":
+		if self.term == "AA":
 			string += "for Spring "
-		elif self.term == "SU":
+		elif self.term == "BB":
 			string += "for Summer "
 		else:
 			string += "for Fall "

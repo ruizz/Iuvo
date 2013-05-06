@@ -15,23 +15,25 @@
 	</div>
 	<div class="hero-unit">
 		
-			<h3>Edit your account info here. Someday.</h3>
+			<h3>Here's what we scooped up about you.</h3>
 			<p>First Name: {{ userAccount.firstName }}</p>
 			<p>Last Name: {{ userAccount.lastName }}</p>
 			<p>Username: {{ userAccount.username }}</p>
 			<p>School: {{ userAccount.school }}</p>
 		<div class="equal row-fluid">
-			<div class="span5">
+			<div class="span6">
 				<h3>Dropbox Status</h3>
-				<p>You are either linked or not linked to Dropbox. I'll tell you one day.</p>
-				<button class="btn btn-large btn-primary" type="submit" href="{% url 'toDropbox' username=userAccount.username %}">Link to Dropbox</button>
+				{% if not userAccout.dropboxLinked %}
+					<p>You're not linked to Dropbox right now.</p>
+					<button class="btn btn-large btn-primary" type="submit" href="{% url 'toDropbox' username=userAccount.username %}">Link to Dropbox</button>
+				{% endif %}
+				{% if userAccount.dropboxLinked %}
+					<p>Huzzah! You're linked to Dropbox!</p>
+				{% endif %}
 			</div>
-			<div class="span2">
-			</div>
-			<div class="span5">
+			<div class="span6">
 				<h3>Facebook Status</h3>
-				<p>You are either linked or not linked to Facebook. I'll tell you one day.</p>
-				<button class="btn btn-large btn-primary" type="submit">Link to Facebook</button>
+				<p>By default, Iuvo requires users to log in with a Facebook account. You're linked and good to go!</p>
 			</div>
 		</div>
 	</div>

@@ -36,8 +36,8 @@
 			{% if courseSlot.isDepartmentEditable and courseSlot.isNumberEditable %}
 			<div class="input-prepend input-append">
 				<span class="add-on"></span>
-				<input class="span2" name="department" type="text" placeholder="Department" value="{{ courseSlot.department }}">
-				<input class="span2" name="number" type="text" placeholder="Number" value="{{ courseSlot.number }}">
+				<input class="span2" name="department" type="text" placeholder="Department" value="{{ courseSlot.department }}" maxlength="4" onkeypress="return lettersOnly(event)">
+				<input class="span2" name="number" type="text" placeholder="Number" value="{{ courseSlot.number }}" maxlength="3" onkeypress="return isNumberKey(event)">
 				<span class="add-on"></span>
 			</div>
 			{% endif %}
@@ -45,14 +45,14 @@
 			<div class="input-prepend input-append">
 				<span class="add-on"></span>
 				<span class="span2 input-xlarge uneditable-input">{{ courseSlot.department }}</span>
-				<input class="span2" name="number" type="text" placeholder="Number" value="{{ courseSlot.number }}">
+				<input class="span2" name="number" type="text" placeholder="Number" value="{{ courseSlot.number }}" maxlength="3" onkeypress="return isNumberKey(event)">
 				<span class="add-on"></span>
 			</div>
 			{% endif %}
 			{% if courseSlot.isDepartmentEditable and not courseSlot.isNumberEditable %}
 			<div class="input-prepend input-append">
 				<span class="add-on"></span>
-				<input class="span2" name="department" type="text" placeholder="Department" value="{{ courseSlot.department }}">
+				<input class="span2" name="department" type="text" placeholder="Department" value="{{ courseSlot.department }}" maxlength="4" onkeypress="return lettersOnly(event)">
 				<span class="span2 input-xlarge uneditable-input">{{ courseSlot.number }}</span>
 				<span class="add-on"></span>
 			</div>
@@ -77,12 +77,40 @@
 		<h4>Semester</h4>
 		<select name="semesterOption">
 			<option value="No Selection">None</option>
-			{% for semester in userAccount.semester_set.all %}
-			<option value="{{ semester }}" {% if courseSlot.semester == semester %} selected="selected" {% endif %}>{{ semester }}</option>
+			{% for semester in userAccount.semesterOrder %}
+			<option value="{{ semester }}" {% if courseSlot.semester == semester %} selected="selected" {% endif %}>{{ semester.termFullName }} {{ semester.year }}</option>
 			{% endfor %}
 		</select>
 		<p><button class="btn btn-large btn-primary" type="submit" value="save">Save Changes</button></p>
 	</form>
 	</div>
 </div>
+
+<!-- Prevent non-numeric keys from being entered in course number slots. -->
+<SCRIPT language=Javascript>
+       <!--
+       function isNumberKey(evt)
+       {
+          var charCode = (evt.which) ? evt.which : event.keyCode;
+          if (charCode != 46 && charCode > 31 
+            && (charCode < 48 || charCode > 57))
+             return false;
+
+          return true;
+       }
+		
+		function lettersOnly(evt)
+		{
+			evt = (evt) ? evt : event;
+			var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
+			((evt.which) ? evt.which : 0));
+			if (charCode > 31 && (charCode < 65 || charCode > 90) &&
+			(charCode < 97 || charCode > 122)) {
+				return false;
+			}
+			return true;
+		}
+	   
+       //-->
+</SCRIPT>
 {% endblock content %}

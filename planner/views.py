@@ -75,7 +75,7 @@ def scheduleView(request, username):
 	userAccount = get_object_or_404(UserAccount, username=username)
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
-		semesters = userAccount.semester_set.all()
+		semesters = userAccount.semester_set.all().order_by('year')
 		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
 		return render(request, 'planner/base_mySchedule.html', context)
 	else:
@@ -98,13 +98,8 @@ def editCourseView(request, username, coursepk):
 			isCourseCompleted = request.POST.get('courseCompletedOption')
 			semester = request.POST.get('semesterOption')
 			
-			print(department)
-			print(number)
-			print(isCourseCompleted)
-			print(semester)
-			
 			if department:
-				courseSlot.department = department
+				courseSlot.department = department.upper()
 			if number:
 				courseSlot.number = number
 			if isCourseCompleted == "True":

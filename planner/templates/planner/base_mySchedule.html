@@ -36,7 +36,7 @@
 			<div class="hero-unit">
 				<div class="row-fluid">
 					<div class="span6">
-						<h4>Scheduled</h4>
+						<h4>Semeseters</h4>
 					</div>
 					<div class="span1 offset5">
 						<a href="{% url 'addSemester' username=userAccount.username %}"><button class="btn btn-primary btn-small"><i class="icon-plus icon-white"></i></button></a>
@@ -45,20 +45,20 @@
 				{% for s in semesters %}
 				<div class="row-fluid">
 					<div class="span6">
-						<h4>{{ s.term }} {{ s.year }} <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-text="{{ s.twitterString }}" data-count="none" data-hashtags="iuvo" data-dnt="true">Tweet</a></h4>
+						<h4>{{ s.termFullName }} {{ s.year }} <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-text="{{ s.twitterString }}" data-count="none" data-hashtags="iuvo" data-dnt="true">Tweet</a></h4>
 						
 					</div>
 					<div class="span1 offset5">
 							<h4>
-							<a href="#modal{{ s.term }}{{ s.year }}" role="button" class="btn btn-danger btn-small" data-toggle="modal"><i class="icon-remove icon-white"></i></a>
+							<a href="#modal{{ s.termFullName }}{{ s.year }}" role="button" class="btn btn-danger btn-small" data-toggle="modal"><i class="icon-remove icon-white"></i></a>
 							<!-- Modal -->
-							<div id="modal{{ s.term }}{{ s.year }}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div id="modal{{ s.termFullName }}{{ s.year }}" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 									<h3 id="myModalLabel">You sure, boss?</h3>
 								</div>
 								<div class="modal-body">
-								You're about to delete {{ s.term }} {{ s.year }}. Are you sure?
+									<p>You're about to delete {{ s.termFullName }} {{ s.year }}. Are you sure?</p>
 								</div>
 								<div class="modal-footer">
 									<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
