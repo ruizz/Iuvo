@@ -6,9 +6,6 @@ urlpatterns = patterns('',
 	# Logs the user out if logged in.
 	# ex: /
 	url(r'^$', views.index, name='index'),
-
-	# ex: /register/
-	url(r'^register/$', views.registerView, name='register'),
 	
 	# ex: /user/john.doe/dashboard/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/dashboard/$', views.dashboardView, name='dashboard'),
@@ -41,7 +38,7 @@ urlpatterns = patterns('',
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/fromDropbox/$', views.fromDropboxLink, name='fromDropbox'),
 	
 	# ex: /facebook/
-	url(r'^register/facebook/$', views.toFacebookLink, name='facebook'),
+	url(r'^facebook/$', views.toFacebookLink, name='facebook'),
 	
 	# ex: /facebook/return/
 	url(r'^register/facebook/return$', views.fromFacebookLink, name='facebookReturn'),

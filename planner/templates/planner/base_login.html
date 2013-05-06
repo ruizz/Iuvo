@@ -5,21 +5,41 @@
 {% endblock navBarHome %}
 
 {% block navBarButtons %}
-<a class="navbar-text pull-right" href="{% url 'register' %}">New User?</a>
+
 {% endblock navBarButtons %}
 
 {% block content %}
-<div class="loginContainer">
+<div class="container">
 	<div class="hero-unit">
-		<form class="form-signin" action="" method="post">{% csrf_token %}
-			<h2 align="center">Welcome.</h2>
-			<div class="alert">
-				{{ state }}
+		<div class="row-fluid">
+			<div class="span6">
+				<h1>Take control.</h1>
+				<p>Check out how easy it is to track your degree plan with Iuvo.</p>
+				<a href="{% url 'facebook' %}"><button class="btn btn-facebook btn-large" type="submit" value="login">Log in using Facebook</button>
+				</a>
 			</div>
-			<input type="text" name="username" class="input-block-level" placeholder="User Name">
-			<input type="password" name="password" class="input-block-level" placeholder="Password">
-			<p align="center"><button class="btn" type="submit" value="login">Sign in</button></p>
-		</form>
+			<div class="span6">
+				<img src="../static/img/front_splash.png">
+			</div>
+		</div>
 	</div> <!-- /hero-unit -->
+	
+	 <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4">
+          <h2>Organize</h2>
+          <p>Not all degree tracks are the same. Use Iuvo to choose which optional classes you want to take. Just set and forget, it's that easy.</p>
+        </div>
+        <div class="span4">
+          <h2>Schedule</h2>
+          <p>Iuvo is a great tool for getting your course schedule on the right track. Add semesters and assign courses to them.</p>
+       </div>
+        <div class="span4">
+          <h2>Share</h2>
+          <p>Sign in with Facebook using your Facebook account. Broadcast your schedule to your Twitter followers. Backup your degree plan using Dropbox integration.</p>
+        </div>
+      </div>
+	  
+	  <hr />
 </div>
 {% endblock content %}

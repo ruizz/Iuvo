@@ -43,7 +43,7 @@ body {
 }
 
 .container {
-	text-shadow: #002550 0.0em 0.0em 0.3em;
+	text-shadow: #002550 0.0em 0.0em 0.5em;
 }
 
 .container h1 {
@@ -64,8 +64,8 @@ body {
 	width: 220px;
 }
 
-h3 .hero-unit {
-
+.hero-unit h1 {
+	margin-top:80px;
 }
 
 /*Black, transparent, rounded boxes that hold content*/
@@ -107,19 +107,12 @@ input, button, select, textarea {
 
 /*Fixed button width for the course buttons*/
 .btn-course {
-    width: 104px !important;
+    width: 120px !important;
+	font-size:12px !important;
 }
 
 .btn-remove {
 	vertical-align: bottom !important;
-}
-
-.btn-course-dropdown-left {
-    width: 93px !important;
-}
-
-.btn-course-dropdown-right {
-    width: 27px !important;
 }
 
 .modal {

@@ -29,6 +29,27 @@ class Semester(models.Model):
 	userAccount = models.ForeignKey(UserAccount, null=True, blank=True)
 	class Meta:
 		unique_together = ("term", "year", "userAccount",)
+	def twitterString(self):
+		string = "I'm taking "
+		css = self.courseslot_set.all()
+		if css:
+			for cs in css:
+				if not cs == css[len(css)-1]:
+					string += cs.department + str(cs.number) + ", "
+				else:
+					string += "and " + cs.department + str(cs.number) + " "
+		else:
+			string += "nothing "
+		
+		if self.term == "SP":
+			string += "for Spring "
+		elif self.term == "SU":
+			string += "for Summer "
+		else:
+			string += "for Fall "
+		string += str(self.year) + "."
+		return string
+	
 	def __unicode__(self):
 		return self.term + " " + str(self.year) + " (" + self.userAccount.username + ")"
 

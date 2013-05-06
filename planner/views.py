@@ -33,67 +33,6 @@ def index(request):
 			state = "Incorrect username/password."
 	return render_to_response('planner/base_login.html', {'state':state, 'username':username}, context_instance=RequestContext(request))
 
-def registerView(request, returnTuple = []):
-	print "register view"
-	logout(request)
-	state = "Please Register."
-	firstname = lastname = email = username = password = school = ''
-	if returnTuple:
-		#user used facebook to get data, we fill in for them
-		print returnTuple
-		state = "Please pick a username and password now."
-		firstname = returnTuple[0]
-		lastname = returnTuple[1]
-		email = returnTuple[2]
-		school = returnTuple[3]
-	if request.POST:
-		# Get all the data that user entered
-		firstname = request.POST.get('firstname')
-		lastname = request.POST.get('lastname')
-		email = request.POST.get('email')
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-		school = request.POST.get('school')
-		
-		# Make sure none of it is empty
-		state = "Missing: "
-		if not firstname:
-			state += "First "
-		if not lastname:
-			state += "Last "
-		if not email:
-			state += "Email "
-		if not username:
-			state += "User "
-		if not password:
-			state += "Pass "
-		if not school:
-			state += "School "
-		
-		# If none of it is empty
-		if firstname and lastname and email and username and password and school:
-			# create auth account
-			try:
-				new_user = User.objects.create_user(username, email, password)
-			except IntegrityError:
-				state = "User already exists."
-				return render_to_response('planner/base_register.html', {'state':state, 'username':username}, context_instance=RequestContext(request))
-			else:
-				state = "Account Created!"
-			
-			# create planner account
-			newUserAccount = UserAccount(firstName=firstname, lastName=lastname, username=username, school=school)
-			newUserAccount.save()
-			newUserAccountPk = newUserAccount.pk
-			newDegreePlan = degreeComputerScience(newUserAccountPk)
-			
-			# Take the user back to the home page
-			url = '/'
-			return HttpResponseRedirect(url)
-	# What's this? The user must have left some fields blank. It's time to lay down the law. Let them know.
-	return render_to_response('planner/base_register.html', {'state':state, 'username':username, 'firstname':firstname , 'lastname':lastname, 'email':email, 'school':school }, context_instance=RequestContext(request))
-#def registerView(request,extraTuple):
-
 @login_required
 def dashboardView(request, username):
 	loggedInUser = request.user.username
@@ -284,7 +223,6 @@ def fromDropboxLink(request, username):
 
 	pass
 	
-
 def toFacebookLink(request):
 	print "To facebook link"
 	url = 'https://www.facebook.com/dialog/oauth?%20client_id=197588320365151%20&redirect_uri=http://localhost:8000/register/facebook/return&scope=email%2Cuser_education_history'
@@ -361,4 +299,4 @@ def fromFacebookLink(request):
 		return HttpResponseRedirect(url)
 	
 	return HttpResponseRedirect('/')
-		
+	
