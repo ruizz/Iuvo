@@ -246,7 +246,7 @@ def fromFacebookLink(request):
 	lhs,access_token = html.split('access_token=')
 	access_token,expire_time = access_token.split('&expires=')
 	#lhs never used, holds dummy value for string split
-	fql_query_url = "SELECT first_name,last_name,email,education,username FROM user WHERE uid=me"
+	fql_query_url = "SELECT first_name,last_name,email,education,uid FROM user WHERE uid=me"
 	fql_query_url = urllib.quote(fql_query_url)+"()"
 	url = "https://graph.facebook.com/fql?q=" + fql_query_url + '&access_token='+access_token
 	data = urllib.urlopen(url).read()
@@ -267,7 +267,7 @@ def fromFacebookLink(request):
 	#return back to the register view but fill in the fields
 	context = { 'firstname':firstname, 'lastname':lastname, 'email':email, 'school':school, }
 	
-	username = pyData["data"][0]["username"]
+	username = pyData["data"][0]["uid"]
 	# Best. Password. Ever. (Make more secure one day?)
 	password = "password"
 
