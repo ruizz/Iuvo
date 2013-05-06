@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="span6">
 			<h1>{{ courseSlot }}</h1>
-			<p><i class="icon-arrow-left icon-white"></i> <a href="{% url 'degreePlan' username=userAccount.username %}">Back to My Degree Plan</a> | <i class="icon-arrow-left icon-white"></i> <a href="{% url 'schedule' username=userAccount.username %}">Back to My Schedule</a></p>
+			<p><i class="icon-arrow-left icon-white" style="margin-top: 3px;"></i> <a href="{% url 'degreePlan' username=userAccount.username %}">Back to My Degree Plan</a> | <i class="icon-arrow-left icon-white" style="margin-top: 3px;"></i> <a href="{% url 'schedule' username=userAccount.username %}">Back to My Schedule</a></p>
 		</div>
 		<div class="span6Right">
 			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>

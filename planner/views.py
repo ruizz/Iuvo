@@ -190,7 +190,57 @@ def editCourseView(request, username, coursepk):
 		
 	return render_to_response('planner/base_editCourse.html', {'state':state, 'username':username, 'userAccount':userAccount, 'courseSlot':courseSlot, }, context_instance=RequestContext(request))
 
+def addSemesterView(request, username):
+	state = "Add a new semester here."
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	if loggedInUser == username:
+		if request.POST:
+			term = request.POST.get('termOption')
+			year = request.POST.get('yearOption')
+			year = "20" + year
+			
+			if not len(year) == 4:
+				state = "Please enter a valid year."
+				return render_to_response('planner/base_addsemester.html', {'state':state, 'username':username, 'userAccount':userAccount, }, context_instance=RequestContext(request))
+			
+			if term == "NO":
+				state = "You must select a term."
+				return render_to_response('planner/base_addsemester.html', {'state':state, 'username':username, 'userAccount':userAccount, }, context_instance=RequestContext(request))
+
+			testSemester = Semester.objects.filter(term=term, year=year, userAccount=userAccount).count()
+			
+			if testSemester == 0:
+				createdSemester = Semester.objects.create(term=term, year=year, userAccount=userAccount)
+				state="Semester added!"
+			else:
+				state="Semester already exists."
+			
+	else:
+		raise Http404
 		
+	return render_to_response('planner/base_addsemester.html', {'state':state, 'username':username, 'userAccount':userAccount, }, context_instance=RequestContext(request))
+	
+def deleteSemesterView(request, username, semesterpk):
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	semester = get_object_or_404(Semester, pk=semesterpk)
+	if loggedInUser == username:
+		# prevent user from viewing course from another user
+		if not semester.userAccount == userAccount:
+			raise Http404
+		
+		for courseSlot in semester.courseslot_set.all():
+			courseSlot.isScheduled = False
+			courseSlot.save()
+		
+		semester.delete()
+	else:
+		raise Http404
+	
+	url = '/user/%s/schedule' % request.user.username
+	return HttpResponseRedirect(url)
+	
 @login_required
 def degreePlanView(request, username):
 	loggedInUser = request.user.username

@@ -64,6 +64,9 @@ body {
 	width: 220px;
 }
 
+h3 .hero-unit {
+
+}
 
 /*Black, transparent, rounded boxes that hold content*/
 .hero-unit {
@@ -85,6 +88,8 @@ h4 {
 	font-size: 18px;
 }
 
+/* For removing semesters */
+
 /*For button font*/
 input, button, select, textarea {
   font-family: "Open Sans", sans-serif;
@@ -102,7 +107,11 @@ input, button, select, textarea {
 
 /*Fixed button width for the course buttons*/
 .btn-course {
-    width: 120px !important;
+    width: 104px !important;
+}
+
+.btn-remove {
+	vertical-align: bottom !important;
 }
 
 .btn-course-dropdown-left {

@@ -22,8 +22,14 @@ urlpatterns = patterns('',
 	# ex: /user/john.doe/schedule/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/schedule/$', views.scheduleView, name='schedule'),
 	
-	# ex: /user/john.doe/editcourse/
+	# ex: /user/john.doe/editcourse/1/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/editcourse/(?P<coursepk>[A-Za-z0-9.-_]+)/$', views.editCourseView, name='editCourse'),
+	
+	# ex: /user/john.doe/schedule/delete/1/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/schedule/delete/(?P<semesterpk>[A-Za-z0-9.-_]+)/$', views.deleteSemesterView, name='deleteSemester'),
+	
+	# ex: /user/john.doe/schedule/add/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/schedule/add/$', views.addSemesterView, name='addSemester'),
 	
 	# ex: /user/john.doe/export/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/export/$', views.exportView, name='export'),
