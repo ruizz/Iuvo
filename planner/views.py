@@ -202,6 +202,43 @@ def exportView(request, username):
 		raise Http404
 
 @login_required
+def importView(request, username):
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_import.html', context)
+	else:
+		raise Http404
+
+@login_required
+def importAction(request, username):
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	if loggedInUser == username:
+		# parse json and load degreeplan into database and user account
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_import.html', context)
+	else:
+		raise Http404
+
+@login_required
+def exportFile(request, username):
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		context = {'degreePlan': degreePlan}
+		# jstring = render_to_string()
+		return render(request, 'planner/degreeplan.json', context)
+	else:
+		raise Http404
+
+@login_required
 def toDropboxLink(request, username):
 	# code to send user to dropbox
 	url = ''#build_authorize_url( token, reverse('fromDropbox' username=username))
@@ -237,7 +274,7 @@ def fromFacebookLink(request):
 	lhs,access_token = html.split('access_token=')
 	access_token,expire_time = access_token.split('&expires=')
 	#lhs never used, holds dummy value for string split
-	fql_query_url = "SELECT first_name,last_name,email,education,username FROM user WHERE uid=me"
+	fql_query_url = "SELECT first_name,last_name,email,education,uid FROM user WHERE uid=me"
 	fql_query_url = urllib.quote(fql_query_url)+"()"
 	url = "https://graph.facebook.com/fql?q=" + fql_query_url + '&access_token='+access_token
 	data = urllib.urlopen(url).read()
@@ -258,7 +295,7 @@ def fromFacebookLink(request):
 	#return back to the register view but fill in the fields
 	context = { 'firstname':firstname, 'lastname':lastname, 'email':email, 'school':school, }
 	
-	username = pyData["data"][0]["username"]
+	username = pyData["data"][0]["uid"]
 	# Best. Password. Ever. (Make more secure one day?)
 	password = "password"
 

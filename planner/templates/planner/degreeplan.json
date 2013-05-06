@@ -1,0 +1,15 @@
+{
+    "name": "{{ degreePlan.name }}",
+    "courseGroups": [
+    {% for group in degreePlan.coursegroup_set.all %}
+        {   "name": "{{ group.name }}", 
+            "columnNumber": {{ group.columnNumber }},
+            "courseSlots": [
+            {% for slot in group.courseslot_set.all %}
+                {   "dept": "{{ slot.department }}", "number": {{ slot.number }}, "hours": {{ slot.hours }}, "isDepartmentEditable": {{ slot.isDepartmentEditable }}, "isNumberEditable": {{ slot.isNumberEditable }} }{% if forloop.revcounter0 %},{% endif %}
+            {% endfor %}
+            ]   
+        }{% if forloop.revcounter0 %},{% endif %}
+    {% endfor %}
+    ]
+}

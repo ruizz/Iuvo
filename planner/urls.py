@@ -31,6 +31,9 @@ urlpatterns = patterns('',
 	# ex: /user/john.doe/export/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/export/$', views.exportView, name='export'),
 	
+	# ex: /user/john.doe/exportFile/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/exportFile/$', views.exportFile, name='exportFile'),
+	
 	# ex: /user/john.doe/toDropbox/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/toDropbox/$', views.toDropboxLink, name='toDropbox'),
 
