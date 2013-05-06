@@ -260,11 +260,13 @@ def fromFacebookLink(request):
 	edu_var = ''
 	#iterate through their education history to find their college
 	for index in range(len(education)):
-		print education[index]
 		if education[index]['type'] == "College" :
-			print "found match"
 			edu_var = education[index]['school']['name']
 	returnTuple = pyData["data"][0]["first_name"],pyData["data"][0]["last_name"],pyData["data"][0]["email"],edu_var
 	#return back to the register view but fill in the fields
-	return registerView(request, returnTuple)
-	
+	return render(request, 'planner/base_facebook.html',returnTuple)
+
+def createFacebookAccountLink(request, returnTuple):
+	print "\n\n\n\n\ntest\n\n\n\n\n"
+	state = "asdf"
+	return redirect('/')

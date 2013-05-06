@@ -39,4 +39,7 @@ urlpatterns = patterns('',
 	
 	# ex: /facebook/return/
 	url(r'^register/facebook/return$', views.fromFacebookLink, name='facebookReturn'),
+
+	# ex: /facebook/return/create
+	url(r'^register/facebook/create$', views.createFacebookAccountLink, name='facebookAccountLink')
 )
