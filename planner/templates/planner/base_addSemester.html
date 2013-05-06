@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block navDegreePlanSelected %}
+ class="active"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<!-- Example row of columns -->
+	<div class="row">
+		<div class="span6">
+			<h1>Add Semester</h1>
+			<p><i class="icon-arrow-left icon-white" style="margin-top: 3px;"></i> <a href="{% url 'degreePlan' username=userAccount.username %}">Back to My Degree Plan</a> | <i class="icon-arrow-left icon-white" style="margin-top: 3px;"></i> <a href="{% url 'schedule' username=userAccount.username %}">Back to My Schedule</a></p>
+		</div>
+		<div class="span6Right">
+			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>
+			<p>{{ userAccount.school }} </p>
+		</div>
+	</div>
+	
+	<!-- Main hero unit for a primary marketing message or call to action -->
+	<div class="hero-unit">
+	<div class="alert">
+		{{ state }}
+	</div>
+	<form class="form-signin" action="" method="post">{% csrf_token %}
+		<h4>Term</h4>
+			<select name="termOption">
+				<option value="NO">------</option>
+				<option value="SP">Spring</option>
+				<option value="SU">Summer</option>
+				<option value="FA">Fall</option>
+			</select>
+		<h4>Year</h4>
+			<div class="input-prepend">
+				<span class="add-on">20</span>
+				<input class="span1" name="yearOption" type="text" maxlength="2">
+			</div>
+		<p><button class="btn btn-large btn-primary" type="submit" value="save">Save Changes</button></p>
+	</form>
+	</div>
+</div>
+{% endblock content %}
