@@ -11,7 +11,7 @@
 <div class="loginContainer">
 	<div class="hero-unit">
 		<form class="form-signin" action="" method="post">{% csrf_token %}
-			<h2 align="center">Welcome.</h2>
+			<h2 align="center">Hold Up!</h2>
 			<div class="alert">
 				{{ state }}
 			</div>
@@ -23,11 +23,6 @@
 			<input type="text" name="school" class="input-block-level" placeholder="School" value = "{{ school }}">
 			<p align="center"><button class="btn btn-large" type="submit" value="login">Create Account</button></p>
 		</form>
-		<h2 align="center">-- OR --</h2>
-		<p align="center">
-			<a href="{% url 'facebook' %}"><button class="btn btn-facebook btn-large" type="submit" value="login">Sign Up Using Facebook</button>
-			</a>
-		</p>
 	</div> <!-- /hero-unit -->
 </div>
 {% endblock content %}

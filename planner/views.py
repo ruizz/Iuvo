@@ -34,6 +34,7 @@ def index(request):
 	return render_to_response('planner/base_login.html', {'state':state, 'username':username}, context_instance=RequestContext(request))
 
 def registerView(request, returnTuple = []):
+	print "register view"
 	logout(request)
 	state = "Please Register."
 	firstname = lastname = email = username = password = school = ''
@@ -285,11 +286,16 @@ def fromDropboxLink(request, username):
 	
 
 def toFacebookLink(request):
+	print "To facebook link"
 	url = 'https://www.facebook.com/dialog/oauth?%20client_id=197588320365151%20&redirect_uri=http://localhost:8000/register/facebook/return&scope=email%2Cuser_education_history'
 	return redirect(url)
 
 def fromFacebookLink(request):
-	url = '/register/'
+	
+	# If user denies Facebook authentication
+	if request.GET.get('error') == "access_denied":
+		return HttpResponseRedirect('/')
+	
 	code = request.GET.get('code')
 	#print(code)
 	url = 'https://graph.facebook.com/oauth/access_token?client_id=197588320365151&redirect_uri=http://localhost:8000/register/facebook/return&client_secret=b654c9c0daad222b60bc62c5d04f4f8d&code=%s' % code
@@ -298,7 +304,7 @@ def fromFacebookLink(request):
 	lhs,access_token = html.split('access_token=')
 	access_token,expire_time = access_token.split('&expires=')
 	#lhs never used, holds dummy value for string split
-	fql_query_url = "SELECT first_name,last_name,email,education FROM user WHERE uid=me"
+	fql_query_url = "SELECT first_name,last_name,email,education,username FROM user WHERE uid=me"
 	fql_query_url = urllib.quote(fql_query_url)+"()"
 	url = "https://graph.facebook.com/fql?q=" + fql_query_url + '&access_token='+access_token
 	data = urllib.urlopen(url).read()
@@ -307,16 +313,52 @@ def fromFacebookLink(request):
 	#and any missing information
 	pyData=json.loads(data)
 	education = pyData["data"][0]["education"]
-	edu_var = ''
+	school = ''
 	#iterate through their education history to find their college
 	for index in range(len(education)):
 		if education[index]['type'] == "College" :
-			edu_var = education[index]['school']['name']
-	returnTuple = pyData["data"][0]["first_name"],pyData["data"][0]["last_name"],pyData["data"][0]["email"],edu_var
+			school = education[index]['school']['name']
+	# returnTuple = pyData["data"][0]["first_name"],pyData["data"][0]["last_name"],pyData["data"][0]["email"],edu_var
+	firstname = pyData["data"][0]["first_name"]
+	lastname = pyData["data"][0]["last_name"]
+	email = pyData["data"][0]["email"]
 	#return back to the register view but fill in the fields
-	return render(request, 'planner/base_facebook.html',returnTuple)
+	context = { 'firstname':firstname, 'lastname':lastname, 'email':email, 'school':school, }
+	
+	username = pyData["data"][0]["username"]
+	# Best. Password. Ever. (Make more secure one day?)
+	password = "password"
 
-def createFacebookAccountLink(request, returnTuple):
-	print "\n\n\n\n\ntest\n\n\n\n\n"
-	state = "asdf"
-	return redirect('/')
+	# IF WE HAVE ALL THE INFO WE NEED.
+	if firstname and lastname and email and username and password and school:
+		# Attempt to create a user Auth account
+		try:
+			new_user = User.objects.create_user(username, email, password)
+		except IntegrityError:
+			# If it already exists, re-save the token (just to be safe),
+			# log the user in, and redirect to the dashboard.
+			plannerAccount = UserAccount.objects.get(username=username)
+			plannerAccount.facebookToken = access_token
+			plannerAccount.save()
+			user = authenticate(username=username, password=password)
+			if user is not None:
+				login(request, user)
+				url = '/user/%s/dashboard' % username
+				return HttpResponseRedirect(url)
+		
+		# Auth account is created, create the account for our planner app
+		newUserAccount = UserAccount(firstName=firstname, lastName=lastname, username=username, school=school, facebookLinked=True, facebookToken=access_token)
+		newUserAccount.save()
+		newUserAccountPk = newUserAccount.pk
+		newDegreePlan = degreeComputerScience(newUserAccountPk)
+		
+		# Log the user into Auth, redirect to dashboard
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+		url = '/user/%s/dashboard' % username
+		return HttpResponseRedirect(url)
+	
+	return HttpResponseRedirect('/')
+		

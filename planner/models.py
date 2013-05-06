@@ -8,7 +8,7 @@ class UserAccount(models.Model):
 	dropboxLinked = models.BooleanField(default=False)
 	dropboxToken = models.CharField(max_length=50, default="", blank=True)
 	facebookLinked = models.BooleanField(default=False)
-	facebookToken = models.CharField(max_length=200, default="", blank=True)
+	facebookToken = models.CharField(max_length=1000, default="", blank=True)
 	def __unicode__(self):
 		return self.lastName + ", " + self.firstName
 	
