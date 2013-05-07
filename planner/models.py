@@ -6,7 +6,8 @@ class UserAccount(models.Model):
 	username = models.CharField(max_length=20)
 	school = models.CharField(max_length=50)
 	dropboxLinked = models.BooleanField(default=False)
-	dropboxToken = models.CharField(max_length=50, default="", blank=True)
+	dropboxToken = models.CharField(max_length=100, default="", blank=True)
+	dropboxTokenSecret = models.CharField(max_length=100, default="", blank=True)
 	facebookLinked = models.BooleanField(default=False)
 	facebookToken = models.CharField(max_length=1000, default="", blank=True)
 	def semesterOrder(self):

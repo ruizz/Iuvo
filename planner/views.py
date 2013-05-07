@@ -13,8 +13,15 @@ from planner.degrees import *
 from dropbox import client, rest, session
 import urllib2,urllib
 import json
+import os
+from django.core.urlresolvers import reverse
 FACEBOOK_APP_ID='197588320365151'
 FACEBOOK_API_SECRET='b654c9c0daad222b60bc62c5d04f4f8d'
+APP_KEY = 'mi3ke3q34bovjs4'
+APP_SECRET = '6utueoeh7kbdf21'
+ACCESS_TYPE = 'app_folder'
+global_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
+global_token = ""
 
 def index(request):
 	logout(request)
@@ -255,20 +262,48 @@ def exportFile(request, username):
 
 @login_required
 def toDropboxLink(request, username):
-	# code to send user to dropbox
-	url = ''#build_authorize_url( token, reverse('fromDropbox' username=username))
-	return redirect(url)
+	userAccount = get_object_or_404(UserAccount, username=username)
+        request_token = global_session.obtain_request_token()
+        global global_token
+        global_token=request_token
+	url = global_session.build_authorize_url(request_token, oauth_callback=request.build_absolute_uri(reverse('fromDropbox',kwargs={'username':userAccount.username})))
+        return redirect(url)
 
 @login_required
 def fromDropboxLink(request, username):
 	
-	# token = ''
-	# account = get_object_or_404(UserAccount, username=username)
-	# account.dropboxLinked = True
-	# account.dropboxToken = token
-	# account.save()
+	access_token = global_session.obtain_access_token(global_token)
+	account = get_object_or_404(UserAccount, username=username)
+	account.dropboxLinked = True
+	account.dropboxToken = access_token.key
+	account.dropboxTokenSecret = access_token.secret
+	account.save()
+	context = {'userAccount': account}
+	return render(request, 'planner/base_myAccount.html', context)
 
-	pass
+@login_required
+def uploadToDropbox(request, username):
+        account = get_object_or_404(UserAccount, username=username)
+        new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
+        new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
+        newclient = client.DropboxClient(new_session)
+        f = open('C:\\test.txt')
+        response = newclient.put_file('/magnum-opus.txt', f)
+        context = {'userAccount': account}
+        return render(request, 'planner/base_export.html', context)
+
+@login_required
+def downloadFromDropbox(request, username):
+        account = get_object_or_404(UserAccount, username=username)
+        new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
+        new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
+        newclient = client.DropboxClient(new_session)
+        f, metadata = newclient.get_file_and_metadata('/magnum-opus.txt')
+        out = open('magnum-opus.txt', 'w')
+        out.write(f.read())
+        out.close()
+        context = {'userAccount': account}
+        return render(request, 'planner/base_export.html', context)
 	
 def toFacebookLink(request):
 	print "To facebook link"
