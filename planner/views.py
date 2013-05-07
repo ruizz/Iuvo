@@ -2,9 +2,12 @@ from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+import cStringIO as StringIO
+from django.core.servers.basehttp import FileWrapper
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import Context, RequestContext, loader
+from django.template.loader import render_to_string
 from planner.models import *
 from planner.degrees import *
 from dropbox import client, rest, session
@@ -233,8 +236,20 @@ def exportFile(request, username):
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
 		context = {'degreePlan': degreePlan}
-		# jstring = render_to_string()
-		return render(request, 'planner/degreeplan.json', context)
+
+		# generate file
+		tempfile = StringIO.StringIO()
+		jstring = render_to_string('planner/degreeplan.json', context)
+		tempfile.write(jstring)
+		print tempfile.getvalue()
+		tempfile.seek(0)
+
+
+		# generate response
+		response = HttpResponse(tempfile, content_type='application/json')
+		response['Content-Disposition'] = 'attachment; filename=degreePlan.json'
+		#response['Content-Length'] = 500
+		return response
 	else:
 		raise Http404
 
