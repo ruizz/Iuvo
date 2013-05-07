@@ -248,7 +248,6 @@ def exportFile(request, username):
 		tempfile = StringIO.StringIO()
 		jstring = render_to_string('planner/degreeplan.json', context)
 		tempfile.write(jstring)
-		print tempfile.getvalue()
 		tempfile.seek(0)
 
 
