@@ -15,7 +15,12 @@ a {
 a:hover {
 	color: white;
 }
-   
+  
+.alert a {
+	color: #c09853;
+	text-decoration:underline
+}
+  
 body {
 	font-family: "Open Sans", sans-serif;
 	font-size: 12px;

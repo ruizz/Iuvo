@@ -12,16 +12,32 @@
 			<h1>Export</h1>
 			<p>Your degree plan, to-go.</p>
 		</div>
+		<div class="span6Right">
+			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>
+			<p>{{ userAccount.school }} </p>
+		</div>
 	</div>
 	
 	<div class="hero-unit">
-		<h3>Export to Dropbox</h3>
-		<p>This may be intesnse. Be sure to take a deep breath before continuing.</p>
-		<a href="{% url 'uploadTo' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Export to Dropbox</button></a>
-		<a href="{% url 'downloadFrom' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Import from Dropbox</button></a>
+		{% if not state == "Nothing" %}
+		<div class="alert">
+			{{ state }}
+		</div>
+		{% endif %}
 		
+		<h3>Export to Dropbox</h3>
+		{% if userAccount.dropboxLinked %}
+			<p>This may be intesnse. Be sure to take a deep breath before continuing.</p>
+			<a href="{% url 'uploadTo' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Export to Dropbox</button></a>
+			<a href="{% url 'downloadFrom' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Import from Dropbox</button></a>
+		{% endif %}
+		
+		{% if not userAccount.dropboxLinked %}
+			<p>Hey! You can't export to Dropbox until you're linked. You can do so in My Account.</p>
+			<a href="{% url 'userAccount' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Go to My Account</button></a>
+		{% endif %}
 		<h3>Backup your degree plan</h3>
-		<p>This may be intesnse. Be sure to take a deep breath before continuing.</p>
+		<p>You can backup your current degree plan to your local machine.</p>
 		<a href="{% url 'exportFile' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit" href="{% url 'toDropbox' username=userAccount.username %}">Export your Degree Plan</button></a>
 	</div>	
 {% endblock content %}

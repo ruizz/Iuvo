@@ -27,25 +27,6 @@ def index(request):
 	# Always log the user out
 	logout(request)
 	return render_to_response('planner/base_login.html', {}, context_instance=RequestContext(request))
-
-@login_required
-def choosePlanView(request, username):
-	loggedInUser = request.user.username
-	userAccount = get_object_or_404(UserAccount, username=username)
-	
-	# Always make sure that user isn't snooping around, looking at another user's page.
-	if loggedInUser == username:
-		degreePlan = userAccount.degreeplan_set.all()[0]
-		semesters = userAccount.semester_set.all()
-		
-		# If user uploaded a degree plan.
-		if request.POST:
-			pass
-		
-		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
-		return render(request, 'planner/base_choosePlan.html', context)
-	else:
-		raise Http404
 		
 @login_required
 def dashboardView(request, username):
@@ -214,12 +195,15 @@ def deleteSemesterView(request, username, semesterpk):
 def exportView(request, username):
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
-	
+	state = "Nothing"
 	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
 		semesters = userAccount.semester_set.all()
-		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		if request.POST:
+			state = request.POST.get('state')
+		
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters, 'state':state}
 		return render(request, 'planner/base_export.html', context)
 	else:
 		raise Http404
@@ -314,7 +298,8 @@ def uploadToDropbox(request, username):
 		filename = "/degree_plan.json"
 
 		response = newclient.put_file(filename, content , True)
-		context = {'userAccount': account}
+		state = "Successfully exported your degree plan to Dropbox!"
+		context = {'userAccount': account, 'state':state, }
 		return render(request, 'planner/base_export.html', context)
 	else:
 		raise Http404
@@ -325,8 +310,7 @@ def downloadFromDropbox(request, username):
 	new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
 	new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
 	newclient = client.DropboxClient(new_session)
-	try:
-		f, metadata = newclient.get_file_and_metadata('/degree_plan.json')
+	f, metadata = newclient.get_file_and_metadata('/degree_plan.json')
 	# out = open('magnum-opus.txt', 'w')#don't realy need
 	jsonstring = f.read()
 	#print jsonstring
@@ -339,12 +323,24 @@ def downloadFromDropbox(request, username):
 	for group in cgs:
 		print "  {0}({1})".format(group['name'], group['columnNumber'])
 		for slot in group['courseSlots']:
-			print "    {0}{1}({2})".format(slot['dept'], slot['number'], slot['hours']);
-
-
+			print "    {0}{1}({2})".format(slot['dept'], slot['number'], slot['isDepartmentEditable']);
+	
+	degreePlan = account.degreeplan_set.all()[0]
+	degreePlan.delete()
+	newDegreePlan = DegreePlan(name=dp['name'], userAccount=account)
+	newDegreePlan.save()
+	
+	for group in cgs:
+		newCourseGroup = CourseGroup(name=group['name'], degreePlan=newDegreePlan, columnNumber=group['columnNumber'])
+		newCourseGroup.save()
+		for slot in group['courseSlots']:
+			newCourseSlot = CourseSlot(department=slot['dept'], number=slot['number'], hours=slot['hours'], isDepartmentEditable=slot['isDepartmentEditable'] , isNumberEditable=slot['isNumberEditable'] ,isScheduled=False, notes='', courseGroup=newCourseGroup)
+			newCourseSlot.save()
+			
 	# out.write(f.read())#dont really need
 	# out.close()#
-	context = {'userAccount': account}
+	state = "Successfully imported your degree plan from Dropbox!"
+	context = {'userAccount': account, 'state':state, }
 	return render(request, 'planner/base_export.html', context)
 	
 def toFacebookLink(request):
@@ -365,14 +361,10 @@ def fromFacebookLink(request):
 	html = response.read()
 	lhs,access_token = html.split('access_token=')
 	access_token,expire_time = access_token.split('&expires=')
-	#lhs never used, holds dummy value for string split
 	fql_query_url = "SELECT first_name,last_name,email,education,uid FROM user WHERE uid=me"
 	fql_query_url = urllib.quote(fql_query_url)+"()"
 	url = "https://graph.facebook.com/fql?q=" + fql_query_url + '&access_token='+access_token
 	data = urllib.urlopen(url).read()
-	#TODO store access token, and expire_time, and time initiated to check against
-	#take json data and put it in a form for the user to fill out, ask them for a username and password, 
-	#and any missing information
 	pyData=json.loads(data)
 	print pyData
 	education = pyData["data"][0]["education"]
@@ -420,7 +412,7 @@ def fromFacebookLink(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-		url = '/user/%s/chooseplan' % username
+		url = '/user/%s/dashboard' % username
 		return HttpResponseRedirect(url)
 	
 	return HttpResponseRedirect('/')

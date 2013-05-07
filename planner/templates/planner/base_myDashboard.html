@@ -12,14 +12,24 @@
 			<h1>My Dashboard</h1>
 			<p>Welcome</p>
 		</div>
+		<div class="span6Right">
+			<h3>{{ userAccount.firstName }} {{ userAccount.lastName }}</h3>
+			<p>{{ userAccount.school }} </p>
+		</div>
 	</div>
 	
 	<div class="hero-unit">
+		{% if not userAccount.dropboxLinked %}
+		<div class="alert">
+			<strong>Hey!</strong> We noticed you haven't linked to Dropbox yet. You can do so <strong><a href="{% url 'userAccount' username=userAccount.username %}">here.</a></strong>
+		</div>
+		{% endif %}
+	
 		<div class="row-fluid">
 			<div class="span6">
 				<h1>Organize</h1>
 				<p>Here you can view your degree plan and edit your courses.</p>
-				<a href=""><button class="btn btn-large btn-primary" type="submit" value="login">My Degree Plan</button>
+				<a href="{% url 'degreePlan' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit" value="login">My Degree Plan</button>
 				</a>
 			</div>
 			<div class="span6">
@@ -30,7 +40,7 @@
 			<div class="span6">
 				<h1>Schedule</h1>
 				<p>Add semesters and assign courses to them here.</p>
-				<a href=""><button class="btn btn-large btn-success" type="submit" value="login">My Schedule</button>
+				<a href="{% url 'schedule' username=userAccount.username %}"><button class="btn btn-large btn-success" type="submit" value="login">My Schedule</button>
 				</a>
 			</div>
 			<div class="span6">
@@ -39,9 +49,9 @@
 		</div>
 		<div class="row-fluid">
 			<div class="span6">
-				<h1>Export</h1>
+				<h1>Share</h1>
 				<p>You can back up your degree plan here.</p>
-				<a href=""><button class="btn btn-large btn-info" type="submit" value="login">Export</button>
+				<a href="{% url 'export' username=userAccount.username %}"><button class="btn btn-large btn-info" type="submit" value="login">Export</button>
 				</a>
 			</div>
 			<div class="span6">
