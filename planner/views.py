@@ -283,14 +283,16 @@ def toDropboxLink(request, username):
 
 @login_required
 def fromDropboxLink(request, username):
-	
-	access_token = global_session.obtain_access_token(global_token)
 	account = get_object_or_404(UserAccount, username=username)
-	account.dropboxLinked = True
-	account.dropboxToken = access_token.key
-	account.dropboxTokenSecret = access_token.secret
-	account.save()
 	context = {'userAccount': account}
+	if request.GET.get('not_approved'):
+		print "user denied"
+	else:
+		access_token = global_session.obtain_access_token(global_token)
+		account.dropboxLinked = True
+		account.dropboxToken = access_token.key
+		account.dropboxTokenSecret = access_token.secret
+		account.save()
 	return render(request, 'planner/base_myAccount.html', context)
 
 @login_required
