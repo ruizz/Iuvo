@@ -8,6 +8,9 @@ urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
 	
 	# ex: /user/john.doe/dashboard/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/chooseplan/$', views.choosePlanView, name='choosePlan'),
+	
+	# ex: /user/john.doe/dashboard/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/dashboard/$', views.dashboardView, name='dashboard'),
 	
 	# ex: /user/john.doe/account/

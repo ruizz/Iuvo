@@ -24,29 +24,35 @@ global_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
 global_token = ""
 
 def index(request):
+	# Always log the user out
 	logout(request)
-	state = "Please log in."
-	username = password = ''
-	if request.POST:
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-		user = authenticate(username=username, password=password)
-		if user is not None:
-			if user.is_active:
-				login(request, user)
-				state = "Login success!"
-				url = '/user/%s/dashboard' % request.user.username
-				return HttpResponseRedirect(url)
-			else:
-				state = "Inactive account."
-		else:
-			state = "Incorrect username/password."
-	return render_to_response('planner/base_login.html', {'state':state, 'username':username}, context_instance=RequestContext(request))
+	return render_to_response('planner/base_login.html', {}, context_instance=RequestContext(request))
 
+@login_required
+def choosePlanView(request, username):
+	loggedInUser = request.user.username
+	userAccount = get_object_or_404(UserAccount, username=username)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
+	if loggedInUser == username:
+		degreePlan = userAccount.degreeplan_set.all()[0]
+		semesters = userAccount.semester_set.all()
+		
+		# If user uploaded a degree plan.
+		if request.POST:
+			pass
+		
+		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
+		return render(request, 'planner/base_choosePlan.html', context)
+	else:
+		raise Http404
+		
 @login_required
 def dashboardView(request, username):
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
 		semesters = userAccount.semester_set.all()
@@ -59,6 +65,8 @@ def dashboardView(request, username):
 def userAccountView(request, username):
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
 		semesters = userAccount.semester_set.all()
@@ -71,6 +79,8 @@ def userAccountView(request, username):
 def degreePlanView(request, username):
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
 		semesters = userAccount.semester_set.all()
@@ -78,11 +88,13 @@ def degreePlanView(request, username):
 		return render(request, 'planner/base_myDegreePlan.html', context)
 	else:
 		raise Http404
-
+		
 @login_required
 def scheduleView(request, username):
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
 		semesters = userAccount.semester_set.all().order_by('year')
@@ -97,17 +109,21 @@ def editCourseView(request, username, coursepk):
 	userAccount = get_object_or_404(UserAccount, username=username)
 	courseSlot = get_object_or_404(CourseSlot, pk=coursepk)
 	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		# prevent user from viewing course from another user
 		if not courseSlot.courseGroup.degreePlan.userAccount == userAccount:
 			raise Http404
 		
+		# If user requested to change info about a course.
 		if request.POST:
 			department = request.POST.get('department')
 			number = request.POST.get('number')
 			isCourseCompleted = request.POST.get('courseCompletedOption')
 			semester = request.POST.get('semesterOption')
 			
+			# Check if changes exist. Javascript on the html page prevents user from
+			#	inputting bogus entries. EX: putting a letter in a numeric field.
 			if department:
 				courseSlot.department = department.upper()
 			if number:
@@ -116,12 +132,11 @@ def editCourseView(request, username, coursepk):
 				courseSlot.isCompleted = True
 			if isCourseCompleted == "False":
 				courseSlot.isCompleted = False
-				
 			if semester:
 				if semester == "No Selection":
 					courseSlot.semester = None
 					courseSlot.isScheduled = False
-				if not semester == "No Selection":
+				else:
 					term = semester[:2]
 					year = semester[3:7]
 					userSemester = Semester.objects.get(term=term, year=year, userAccount=userAccount)
@@ -132,14 +147,18 @@ def editCourseView(request, username, coursepk):
 			state="Changes saved!"
 	else:
 		raise Http404
-		
-	return render_to_response('planner/base_editCourse.html', {'state':state, 'username':username, 'userAccount':userAccount, 'courseSlot':courseSlot, }, context_instance=RequestContext(request))
+	
+	context = {'state':state, 'username':username, 'userAccount':userAccount, 'courseSlot':courseSlot, }
+	return render_to_response('planner/base_editCourse.html', context, context_instance=RequestContext(request))
 
 def addSemesterView(request, username):
 	state = "Add a new semester here."
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
+		# If user requests to add a semester.
 		if request.POST:
 			term = request.POST.get('termOption')
 			year = request.POST.get('yearOption')
@@ -165,16 +184,21 @@ def addSemesterView(request, username):
 		raise Http404
 		
 	return render_to_response('planner/base_addsemester.html', {'state':state, 'username':username, 'userAccount':userAccount, }, context_instance=RequestContext(request))
-	
+
+@login_required
 def deleteSemesterView(request, username, semesterpk):
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
 	semester = get_object_or_404(Semester, pk=semesterpk)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		# prevent user from viewing course from another user
 		if not semester.userAccount == userAccount:
 			raise Http404
 		
+		# Each course has a flag to tell if it is scheduled to a semester. We need to change
+		# all of the courses in the semester to false before deleting the semester.
 		for courseSlot in semester.courseslot_set.all():
 			courseSlot.isScheduled = False
 			courseSlot.save()
@@ -185,24 +209,13 @@ def deleteSemesterView(request, username, semesterpk):
 	
 	url = '/user/%s/schedule' % request.user.username
 	return HttpResponseRedirect(url)
-	
-@login_required
-def degreePlanView(request, username):
-	loggedInUser = request.user.username
-	userAccount = get_object_or_404(UserAccount, username=username)
-	if loggedInUser == username:
-		degreePlan = userAccount.degreeplan_set.all()[0]
-		semesters = userAccount.semester_set.all()
-		context = { 'userAccount': userAccount, 'degreePlan': degreePlan, 'semesters': semesters}
-		return render(request, 'planner/base_myDegreePlan.html', context)
-	else:
-		raise Http404	
-		
 		
 @login_required
 def exportView(request, username):
 	loggedInUser = request.user.username
 	userAccount = get_object_or_404(UserAccount, username=username)
+	
+	# Always make sure that user isn't snooping around, looking at another user's page.
 	if loggedInUser == username:
 		degreePlan = userAccount.degreeplan_set.all()[0]
 		semesters = userAccount.semester_set.all()
@@ -347,6 +360,7 @@ def fromFacebookLink(request):
 	#take json data and put it in a form for the user to fill out, ask them for a username and password, 
 	#and any missing information
 	pyData=json.loads(data)
+	print pyData
 	education = pyData["data"][0]["education"]
 	school = ''
 	#iterate through their education history to find their college
@@ -363,7 +377,7 @@ def fromFacebookLink(request):
 	username = pyData["data"][0]["uid"]
 	# Best. Password. Ever. (Make more secure one day?)
 	password = "password"
-
+	
 	# IF WE HAVE ALL THE INFO WE NEED.
 	if firstname and lastname and email and username and password and school:
 		# Attempt to create a user Auth account
@@ -392,7 +406,7 @@ def fromFacebookLink(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-		url = '/user/%s/dashboard' % username
+		url = '/user/%s/chooseplan' % username
 		return HttpResponseRedirect(url)
 	
 	return HttpResponseRedirect('/')
