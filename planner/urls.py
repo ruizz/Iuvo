@@ -36,6 +36,9 @@ urlpatterns = patterns('',
 
 	# ex: /user/john.doe/fromDropbox/
 	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/fromDropbox/$', views.fromDropboxLink, name='fromDropbox'),
+
+        # ex: /user/john.doe/uploadTo/
+	url(r'^user/(?P<username>[A-Za-z0-9.-_]+)/uploadTo/$', views.uploadToDropbox, name='uploadTo'),
 	
 	# ex: /facebook/
 	url(r'^facebook/$', views.toFacebookLink, name='facebook'),

@@ -23,7 +23,7 @@
 		<div class="equal row-fluid">
 			<div class="span6">
 				<h3>Dropbox Status</h3>
-				{% if not userAccout.dropboxLinked %}
+				{% if not userAccount.dropboxLinked %}
 					<p>You're not linked to Dropbox right now.</p>
 					<a href="{% url 'toDropbox' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Link to Dropbox</button></a>
 				{% endif %}

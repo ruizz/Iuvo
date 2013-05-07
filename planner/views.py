@@ -10,6 +10,7 @@ from planner.degrees import *
 from dropbox import client, rest, session
 import urllib2,urllib
 import json
+import os
 from django.core.urlresolvers import reverse
 FACEBOOK_APP_ID='197588320365151'
 FACEBOOK_API_SECRET='b654c9c0daad222b60bc62c5d04f4f8d'
@@ -222,10 +223,22 @@ def fromDropboxLink(request, username):
 	access_token = global_session.obtain_access_token(global_token)
 	account = get_object_or_404(UserAccount, username=username)
 	account.dropboxLinked = True
-	account.dropboxToken = access_token
+	account.dropboxToken = access_token.key
+	account.dropboxTokenSecret = access_token.secret
 	account.save()
 	context = {'userAccount': account}
 	return render(request, 'planner/base_myAccount.html', context)
+
+@login_required
+def uploadToDropbox(request, username):
+        account = get_object_or_404(UserAccount, username=username)
+        new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
+        new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
+        newclient = client.DropboxClient(new_session)
+        f = open('C:\\test.txt')
+        response = newclient.put_file('/magnum-opus.txt', f)
+        context = {'userAccount': account}
+        return render(request, 'planner/base_export.html', context)
 	
 def toFacebookLink(request):
 	print "To facebook link"
