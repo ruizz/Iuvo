@@ -235,8 +235,8 @@ def uploadToDropbox(request, username):
         new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
         new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
         newclient = client.DropboxClient(new_session)
-        f = open('C:\\test.txt')
-        response = newclient.put_file('/magnum-opus.txt', f)
+        f = "THIS IS A TEST STRING TO PUT IN A DROPBOX FOLDER test string 2"
+        response = newclient.put_file('/magnum-opus.txt', f , True)
         context = {'userAccount': account}
         return render(request, 'planner/base_export.html', context)
 
@@ -247,9 +247,10 @@ def downloadFromDropbox(request, username):
         new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
         newclient = client.DropboxClient(new_session)
         f, metadata = newclient.get_file_and_metadata('/magnum-opus.txt')
-        out = open('magnum-opus.txt', 'w')
-        out.write(f.read())
-        out.close()
+        out = open('magnum-opus.txt', 'w')#don't realy need
+        jsonstring = f.read()
+        out.write(f.read())#dont really need
+        out.close()#
         context = {'userAccount': account}
         return render(request, 'planner/base_export.html', context)
 	
