@@ -262,11 +262,11 @@ def exportFile(request, username):
 @login_required
 def toDropboxLink(request, username):
 	userAccount = get_object_or_404(UserAccount, username=username)
-        request_token = global_session.obtain_request_token()
-        global global_token
-        global_token=request_token
+	request_token = global_session.obtain_request_token()
+	global global_token
+	global_token=request_token
 	url = global_session.build_authorize_url(request_token, oauth_callback=request.build_absolute_uri(reverse('fromDropbox',kwargs={'username':userAccount.username})))
-        return redirect(url)
+	return redirect(url)
 
 @login_required
 def fromDropboxLink(request, username):
@@ -282,28 +282,43 @@ def fromDropboxLink(request, username):
 
 @login_required
 def uploadToDropbox(request, username):
-        account = get_object_or_404(UserAccount, username=username)
-        new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
-        new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
-        newclient = client.DropboxClient(new_session)
-        f = "THIS IS A TEST STRING TO PUT IN A DROPBOX FOLDER test string 2"
-        response = newclient.put_file('/magnum-opus.txt', f , True)
-        context = {'userAccount': account}
-        return render(request, 'planner/base_export.html', context)
+	loggedInUser = request.user.username
+	account = get_object_or_404(UserAccount, username=username)
+	if loggedInUser == username:
+		new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
+		new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
+		newclient = client.DropboxClient(new_session)
+
+		degreePlan = account.degreeplan_set.all()[0]
+		context = {'degreePlan': degreePlan}
+
+		# generate file
+		tempfile = StringIO.StringIO()
+		content = render_to_string('planner/degreeplan.json', context)
+		# filename = "/{0}.json".format(degreePlan.name.replace(' ', '_'))
+		filename = "/degree_plan.json"
+
+		response = newclient.put_file(filename, content , True)
+		context = {'userAccount': account}
+		return render(request, 'planner/base_export.html', context)
+	else:
+		raise Http404
 
 @login_required
 def downloadFromDropbox(request, username):
-        account = get_object_or_404(UserAccount, username=username)
-        new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
-        new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
-        newclient = client.DropboxClient(new_session)
-        f, metadata = newclient.get_file_and_metadata('/magnum-opus.txt')
-        out = open('magnum-opus.txt', 'w')#don't realy need
-        jsonstring = f.read()
-        out.write(f.read())#dont really need
-        out.close()#
-        context = {'userAccount': account}
-        return render(request, 'planner/base_export.html', context)
+	account = get_object_or_404(UserAccount, username=username)
+	new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
+	new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
+	newclient = client.DropboxClient(new_session)
+	f, metadata = newclient.get_file_and_metadata('/magnum-opus.txt')
+	out = open('magnum-opus.txt', 'w')#don't realy need
+	jsonstring = f.read()
+
+
+	out.write(f.read())#dont really need
+	out.close()#
+	context = {'userAccount': account}
+	return render(request, 'planner/base_export.html', context)
 	
 def toFacebookLink(request):
 	print "To facebook link"

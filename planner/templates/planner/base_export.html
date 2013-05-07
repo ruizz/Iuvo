@@ -17,7 +17,6 @@
 	<div class="hero-unit">
 		<h3>Export to Dropbox</h3>
 		<p>This may be intesnse. Be sure to take a deep breath before continuing.</p>
-		<button class="btn btn-large btn-primary" type="submit" href="{% url 'toDropbox' username=userAccount.username %}">Export to Dropbox</button>
 		<a href="{% url 'uploadTo' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Export to Dropbox</button></a>
 		<a href="{% url 'downloadFrom' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit">Import from Dropbox</button></a>
 		
