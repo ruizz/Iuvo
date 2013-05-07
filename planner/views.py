@@ -323,13 +323,24 @@ def downloadFromDropbox(request, username):
 	new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
 	new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
 	newclient = client.DropboxClient(new_session)
-	f, metadata = newclient.get_file_and_metadata('/magnum-opus.txt')
-	out = open('magnum-opus.txt', 'w')#don't realy need
+	f, metadata = newclient.get_file_and_metadata('/degree_plan.json')
+	# out = open('magnum-opus.txt', 'w')#don't realy need
 	jsonstring = f.read()
+	#print jsonstring
+	dp = json.loads(jsonstring)
+	# print dp
+
+	
+	print "name: ", dp['name']
+	cgs = dp['courseGroups']
+	for group in cgs:
+		print "  {0}({1})".format(group['name'], group['columnNumber'])
+		for slot in group['courseSlots']:
+			print "    {0}{1}({2})".format(slot['dept'], slot['number'], slot['hours']);
 
 
-	out.write(f.read())#dont really need
-	out.close()#
+	# out.write(f.read())#dont really need
+	# out.close()#
 	context = {'userAccount': account}
 	return render(request, 'planner/base_export.html', context)
 	
