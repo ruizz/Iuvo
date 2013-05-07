@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block navDashboardSelected %}
+ class="active"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	
+	<div class="hero-unit">
+		<div class="row-fluid">
+			<div class="span12">
+				<h2 align="center">Hold up, {{ userAccount.firstName }}!</h2>
+				<p align="center">There's just one last step. Either select a degree plan, or import one from a previous backup.</p>
+				<p align="center"><a href="{% url 'dashboard' username=userAccount.username %}"><button class="btn btn-large btn-primary" type="submit" value="login">Use default Computer Science.</button></a></p>
+				<h2 align="center">-- OR --</h2>
+				<form class="form-signin" action="" method="post">{% csrf_token %}
+					<p align="center"><input type="file" name="datafile" size="40"></p>
+					<p align="center">There's just one last step. Either select a degree plan, or import one from a previous backup.</p>
+					<p align="center"><button class="btn btn-large" type="submit" value="save">Upload Degree Plan</button></p>
+				</form>
+				</a>
+			</div>
+		</div>
+	</div>	
+{% endblock content %}
