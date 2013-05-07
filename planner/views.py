@@ -239,6 +239,19 @@ def uploadToDropbox(request, username):
         response = newclient.put_file('/magnum-opus.txt', f)
         context = {'userAccount': account}
         return render(request, 'planner/base_export.html', context)
+
+@login_required
+def downloadFromDropbox(request, username):
+        account = get_object_or_404(UserAccount, username=username)
+        new_session = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
+        new_session.set_token(account.dropboxToken,account.dropboxTokenSecret)
+        newclient = client.DropboxClient(new_session)
+        f, metadata = newclient.get_file_and_metadata('/magnum-opus.txt')
+        out = open('magnum-opus.txt', 'w')
+        out.write(f.read())
+        out.close()
+        context = {'userAccount': account}
+        return render(request, 'planner/base_export.html', context)
 	
 def toFacebookLink(request):
 	print "To facebook link"
